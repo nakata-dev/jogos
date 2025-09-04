@@ -120,7 +120,7 @@
                 gap: 2px;
             }
             .cell {
-                font-size: 1.8rem; /* Tamanho da fonte para celular */
+                font-size: 1.8rem;
             }
         }
     </style>
@@ -128,7 +128,7 @@
 <body>
     <header>
         <h1 id="titulo-nivel"></h1>
-        <div class="nivel">NOMES</div>
+        <div class="nivel">AVENTURA</div>
     </header>
 
     <main>
@@ -152,12 +152,12 @@
     const listaElement = document.getElementById("lista-palavras");
 
     const niveis = {
-    1: { titulo: "NÍVEL 1: BÁSICO", rows: 10, cols: 10, palavras: ["BATIAN", "DITIAN", "PESCA", "MAIA", "XUXA", "LAICA", "CHULIKA"] },
-    2: { titulo: "NÍVEL 2: FÁCIL", rows: 12, cols: 11, palavras: ["JESUS", "PEDRO", "MALU", "EDUARDO", "MARCOS", "REGINA", "PUTUCHA", "ROSA"] },
-    3: { titulo: "NÍVEL 3: INTERMEDIÁRIO", rows: 15, cols: 12, palavras: ["FRANK", "MARCIA", "DIOGO", "SILVIA", "LUIZA", "ERNESTO", "GALVÃO", "TEREZA", "TELMA", "GEREMIAS"] },
-    4: { titulo: "NÍVEL 4: DIFÍCIL", rows: 16, cols: 13, palavras: ["CRIATIVIDADE", "INSPIRAÇÃO", "IMAGINAÇÃO", "CONHECIMENTO", "DESCOBERTA", "SABEDORIA", "FUTURO", "PROGRESSO", "CIÊNCIA", "HISTÓRIA", "FILOSOFIA"] },
-    5: { titulo: "NÍVEL 5: ESPECIALISTA", rows: 18, cols: 14, palavras: ["CONSTITUIÇÃO", "GOVERNO", "DEMOCRACIA", "CIDADANIA", "LIBERDADE", "JUSTIÇA", "LEGISLAÇÃO", "ELEGIBILIDADE", "SOCIEDADE", "POLÍTICA", "ECONOMIA", "DIREITO"] }
-};
+        1: { titulo: "NÍVEL 1: BÁSICO", rows: 10, cols: 10, palavras: ["BOM", "LEVE", "LUZ", "DIA", "PAZ", "VIDA", "AR"] },
+        2: { titulo: "NÍVEL 2: FÁCIL", rows: 12, cols: 11, palavras: ["AMOR", "PAZ", "VIDA", "LUZ", "ESPERANÇA", "SORTE", "TEMPO", "FÉ"] },
+        3: { titulo: "NÍVEL 3: INTERMEDIÁRIO", rows: 15, cols: 12, palavras: ["AVENTURA", "VIAGEM", "DESAFIO", "MISTÉRIO", "PODER", "MAGIA", "SONHO", "LIVRO", "HERÓI", "VILÃO"] },
+        4: { titulo: "NÍVEL 4: DIFÍCIL", rows: 16, cols: 13, palavras: ["CRIATIVIDADE", "INSPIRAÇÃO", "IMAGINAÇÃO", "CONHECIMENTO", "DESCOBERTA", "SABEDORIA", "FUTURO", "PROGRESSO", "CIÊNCIA", "HISTÓRIA", "FILOSOFIA"] },
+        5: { titulo: "NÍVEL 5: ESPECIALISTA", rows: 18, cols: 14, palavras: ["CONSTITUIÇÃO", "GOVERNO", "DEMOCRACIA", "CIDADANIA", "LIBERDADE", "JUSTIÇA", "LEGISLAÇÃO", "ELEGIBILIDADE", "SOCIEDADE", "POLÍTICA", "ECONOMIA", "DIREITO"] }
+    };
 
     function setupGame(nivel) {
         if (!niveis[nivel]) {
@@ -174,7 +174,7 @@
         
         document.getElementById('titulo-nivel').textContent = tituloNivel;
         document.documentElement.style.setProperty('--grid-cols', gridCols);
-
+        
         grid = Array.from({ length: gridRows }, () => Array(gridCols).fill(''));
         selectedCells = [];
         palavrasEncontradas = 0;
@@ -185,66 +185,62 @@
         mostrarPalavras();
     }
 
-   function colocarPalavrasNoGrid() {
-    palavrasDoNivel.sort((a, b) => b.length - a.length); // Tenta colocar as palavras maiores primeiro
+    function colocarPalavrasNoGrid() {
+        palavrasDoNivel.sort((a, b) => b.length - a.length);
 
-    palavrasDoNivel.forEach(palavra => {
-        let palavraColocada = false;
-        let tentativas = 0;
-        const maxTentativas = 5000;
+        palavrasDoNivel.forEach(palavra => {
+            let palavraColocada = false;
+            let tentativas = 0;
+            const maxTentativas = 5000;
 
-        while (!palavraColocada && tentativas < maxTentativas) {
-            tentativas++;
+            while (!palavraColocada && tentativas < maxTentativas) {
+                tentativas++;
 
-            // Escolhe uma direção aleatória (8 direções)
-            const direcoes = [
-                { dr: 0, dc: 1 },    // Horizontal (direita)
-                { dr: 0, dc: -1 },   // Horizontal (esquerda)
-                { dr: 1, dc: 0 },    // Vertical (baixo)
-                { dr: -1, dc: 0 },   // Vertical (cima)
-                { dr: 1, dc: 1 },    // Diagonal (baixo-direita)
-                { dr: 1, dc: -1 },   // Diagonal (baixo-esquerda)
-                { dr: -1, dc: 1 },   // Diagonal (cima-direita)
-                { dr: -1, dc: -1 }   // Diagonal (cima-esquerda)
-            ];
-            const direcao = direcoes[Math.floor(Math.random() * direcoes.length)];
+                const direcoes = [
+                    { dr: 0, dc: 1 },
+                    { dr: 0, dc: -1 },
+                    { dr: 1, dc: 0 },
+                    { dr: -1, dc: 0 },
+                    { dr: 1, dc: 1 },
+                    { dr: 1, dc: -1 },
+                    { dr: -1, dc: 1 },
+                    { dr: -1, dc: -1 }
+                ];
+                const direcao = direcoes[Math.floor(Math.random() * direcoes.length)];
 
-            // Escolhe uma posição inicial aleatória
-            const linhaInicial = Math.floor(Math.random() * gridRows);
-            const colunaInicial = Math.floor(Math.random() * gridCols);
+                const linhaInicial = Math.floor(Math.random() * gridRows);
+                const colunaInicial = Math.floor(Math.random() * gridCols);
 
-            let podeColocar = true;
-            for (let i = 0; i < palavra.length; i++) {
-                const linhaAtual = linhaInicial + i * direcao.dr;
-                const colunaAtual = colunaInicial + i * direcao.dc;
-
-                // Checa se a palavra cabe na grade
-                if (linhaAtual < 0 || linhaAtual >= gridRows || colunaAtual < 0 || colunaAtual >= gridCols) {
-                    podeColocar = false;
-                    break;
-                }
-
-                // Checa se a célula está vazia ou se a letra é a mesma (cruzamento)
-                if (grid[linhaAtual][colunaAtual] !== '' && grid[linhaAtual][colunaAtual] !== palavra[i]) {
-                    podeColocar = false;
-                    break;
-                }
-            }
-
-            if (podeColocar) {
+                let podeColocar = true;
                 for (let i = 0; i < palavra.length; i++) {
                     const linhaAtual = linhaInicial + i * direcao.dr;
                     const colunaAtual = colunaInicial + i * direcao.dc;
-                    grid[linhaAtual][colunaAtual] = palavra[i];
+
+                    if (linhaAtual < 0 || linhaAtual >= gridRows || colunaAtual < 0 || colunaAtual >= gridCols) {
+                        podeColocar = false;
+                        break;
+                    }
+
+                    if (grid[linhaAtual][colunaAtual] !== '' && grid[linhaAtual][colunaAtual] !== palavra[i]) {
+                        podeColocar = false;
+                        break;
+                    }
                 }
-                palavraColocada = true;
+
+                if (podeColocar) {
+                    for (let i = 0; i < palavra.length; i++) {
+                        const linhaAtual = linhaInicial + i * direcao.dr;
+                        const colunaAtual = colunaInicial + i * direcao.dc;
+                        grid[linhaAtual][colunaAtual] = palavra[i];
+                    }
+                    palavraColocada = true;
+                }
             }
-        }
-        if (!palavraColocada) {
-            console.warn(`Aviso: A palavra '${palavra}' não pôde ser colocada na grade após ${maxTentativas} tentativas.`);
-        }
-    });
-}
+            if (!palavraColocada) {
+                console.warn(`Aviso: A palavra '${palavra}' não pôde ser colocada na grade após ${maxTentativas} tentativas.`);
+            }
+        });
+    }
 
     function preencherGridComLetrasAleatorias() {
         for (let i = 0; i < gridRows; i++) {
@@ -280,13 +276,13 @@
     }
 
     function iniciarSelecao(cell, event) {
-        if (cell.classList.contains('encontrada')) return;
-        event.preventDefault(); 
-        isSelecting = true;
-        deselecionarCelulas();
-        cell.classList.add('selected');
-        selectedCells.push(cell);
-    }
+    if (cell.classList.contains('encontrada')) return; // Só bloqueia se a primeira célula já estiver encontrada
+    event.preventDefault(); 
+    isSelecting = true;
+    deselecionarCelulas();
+    cell.classList.add('selected');
+    selectedCells.push(cell);
+}
 
     function handleTouchMove(event) {
         if (!isSelecting) return;
@@ -299,61 +295,36 @@
     }
 
     function handleMouseOver(cell, event) {
-    if (!isSelecting || cell.classList.contains('encontrada')) return;
+    if (!isSelecting) return;
 
-    const primeiro = selectedCells[0];
-    const lastSelected = selectedCells[selectedCells.length - 1];
-
+    const firstCell = selectedCells[0];
     const currentRow = parseInt(cell.dataset.row);
     const currentCol = parseInt(cell.dataset.col);
-    const lastRow = parseInt(lastSelected.dataset.row);
-    const lastCol = parseInt(lastSelected.dataset.col);
-    const firstRow = parseInt(primeiro.dataset.row);
-    const firstCol = parseInt(primeiro.dataset.col);
+    const firstRow = parseInt(firstCell.dataset.row);
+    const firstCol = parseInt(firstCell.dataset.col);
 
-    // Calcula a direção baseada na primeira célula
     const dr = currentRow - firstRow;
     const dc = currentCol - firstCol;
 
-    // Apenas se for uma linha reta a partir do início
     const isHorizontal = dr === 0;
     const isVertical = dc === 0;
     const isDiagonal = Math.abs(dr) === Math.abs(dc);
-    
-    // Calcula a distância do movimento
-    const distanceRow = Math.abs(currentRow - lastRow);
-    const distanceCol = Math.abs(currentCol - lastCol);
 
-    if (
-        (isHorizontal || isVertical || isDiagonal) &&
-        !selectedCells.includes(cell) &&
-        (distanceRow === 1 || distanceCol === 1)
-    ) {
-        // Se for um movimento válido (horizontal, vertical ou diagonal)
-        // E a nova célula estiver adjacente à última selecionada, adicione.
+    // Permite que o usuário arraste em qualquer direção, desde que seja uma linha reta
+    if (isHorizontal || isVertical || isDiagonal) {
         const cellsInPath = getCellsInPath(firstRow, firstCol, currentRow, currentCol);
         
-        // Verifica se todas as células no caminho são válidas para seleção
-        const isValidPath = cellsInPath.every(c => !c.classList.contains('encontrada'));
-        
-        if (isValidPath) {
-            deselecionarCelulas(); // Limpa a seleção para reconstruir
-            cellsInPath.forEach(c => c.classList.add('selected'));
-            selectedCells = cellsInPath;
-        }
-    } else if (
-        (isHorizontal || isVertical || isDiagonal) && 
-        selectedCells.includes(cell)
-    ) {
-        // Se o usuário está desfazendo a seleção
-        const index = selectedCells.indexOf(cell);
-        const cellsToDeselect = selectedCells.slice(index + 1);
-        cellsToDeselect.forEach(c => c.classList.remove('selected'));
-        selectedCells = selectedCells.slice(0, index + 1);
+        // Limpa e reconstrói a seleção a cada movimento
+        deselecionarCelulas();
+        cellsInPath.forEach(c => c.classList.add('selected'));
+        selectedCells = cellsInPath;
+    } else {
+        // Se a forma não for uma linha reta, deseleciona tudo
+        deselecionarCelulas();
     }
 }
 
-function getCellsInPath(r1, c1, r2, c2) {
+    function getCellsInPath(r1, c1, r2, c2) {
     const cells = [];
     const dr = Math.sign(r2 - r1);
     const dc = Math.sign(c2 - c1);
@@ -366,6 +337,7 @@ function getCellsInPath(r1, c1, r2, c2) {
         if (cell) {
             cells.push(cell);
         }
+        // Move para a próxima célula na direção correta
         r += dr;
         c += dc;
     }
@@ -389,36 +361,7 @@ function getCellsInPath(r1, c1, r2, c2) {
     
     const palavraNaLista = palavrasDoNivel.find(p => p === palavraSelecionada || p === palavraReversa);
     
-    // Se a palavra não for encontrada na lista, deseleciona tudo
-    if (!palavraNaLista) {
-        deselecionarCelulas();
-        return;
-    }
-
-    // Ordena as células para garantir a verificação em sequência
-    selectedCells.sort((a, b) => {
-        const rowA = parseInt(a.dataset.row);
-        const colA = parseInt(a.dataset.col);
-        const rowB = parseInt(b.dataset.row);
-        const colB = parseInt(b.dataset.col);
-        if (rowA !== rowB) return rowA - rowB;
-        return colA - colB;
-    });
-
-    // Pega as coordenadas da primeira e última célula
-    const primeiraCelula = selectedCells[0];
-    const ultimaCelula = selectedCells[selectedCells.length - 1];
-    const dr = parseInt(ultimaCelula.dataset.row) - parseInt(primeiraCelula.dataset.row);
-    const dc = parseInt(ultimaCelula.dataset.col) - parseInt(primeiraCelula.dataset.col);
-    
-    const length = selectedCells.length - 1;
-
-    // Checa se a seleção é uma linha reta (horizontal, vertical ou diagonal)
-    const isHorizontal = dr === 0 && Math.abs(dc) === length;
-    const isVertical = dc === 0 && Math.abs(dr) === length;
-    const isDiagonal = Math.abs(dr) === Math.abs(dc) && Math.abs(dr) === length;
-
-    if (isHorizontal || isVertical || isDiagonal) {
+    if (palavraNaLista) {
         marcarComoEncontrada(palavraNaLista);
         palavrasEncontradas++;
         if (palavrasEncontradas === palavrasDoNivel.length) {
@@ -428,7 +371,6 @@ function getCellsInPath(r1, c1, r2, c2) {
             }, 500);
         }
     } else {
-        // Se a forma não for uma linha reta, deseleciona
         deselecionarCelulas();
     }
 }
