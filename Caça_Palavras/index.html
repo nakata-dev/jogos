@@ -1,130 +1,133 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Caça-Palavras</title>
-<style>
-    /* Reset básico */
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        font-family: Arial, Helvetica, sans-serif;
-    }
-
-    body {
-        background: url('https://picsum.photos/800/1200?blur=3') no-repeat center center fixed;
-        background-size: cover;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: flex-start;
-        min-height: 100vh;
-        color: #fff;
-    }
-
-    header {
-        text-align: center;
-        margin: 10px 0;
-    }
-
-    header h1 {
-        font-size: 1.4rem;
-    }
-
-    header .nivel {
-        font-size: 1rem;
-        margin-top: 5px;
-        background: #22c55e;
-        padding: 5px 15px;
-        border-radius: 20px;
-        font-weight: bold;
-    }
-
-    main {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        flex: 1;
-        width: 100%;
-        max-width: 500px;
-        padding: 10px;
-    }
-
-    .grid {
-        display: grid;
-        grid-template-columns: repeat(10, 1fr);
-        gap: 4px;
-        background: rgba(15, 23, 36, 0.9);
-        padding: 10px;
-        border-radius: 12px;
-    }
-
-    .cell {
-        width: 32px;
-        height: 32px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.5rem;
-        font-weight: bold;
-        background: #0f1724;
-        border-radius: 4px;
-        cursor: pointer;
-        transition: background 0.3s ease, transform 0.2s ease;
-        user-select: none;
-    }
-
-    .cell:hover {
-        background: #1e293b;
-        transform: scale(1.2);
-    }
-
-    .cell.selected {
-        background: #f59e0b;
-        color: #000;
-    }
-
-    .palavras {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        margin-top: 15px;
-        gap: 8px;
-    }
-
-    .palavras span {
-        background: rgba(0, 0, 0, 0.6);
-        padding: 6px 12px;
-        border-radius: 20px;
-        font-size: 0.9rem;
-        cursor: default;
-        transition: all 0.3s ease;
-    }
-
-    .palavras span.encontrada {
-        background: #22c55e;
-        text-decoration: line-through;
-        color: #fff;
-    }
-
-    @media (max-width: 600px) {
-        .grid {
-            grid-template-columns: repeat(10, 1fr);
-            gap: 2px;
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caça-Palavras</title>
+    <style>
+        /* Reset básico */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
         }
-        .cell {
-            width: 35px;
-            height: 35px;
+
+        body {
+            background: url('https://picsum.photos/800/1200?blur=3') no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 100vh;
+            color: #fff;
+        }
+
+        header {
+            text-align: center;
+            margin: 10px 0;
+        }
+
+        header h1 {
+            font-size: 1.4rem;
+        }
+
+        header .nivel {
             font-size: 1rem;
+            margin-top: 5px;
+            background: #22c55e;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
         }
-    }
-</style>
+
+        main {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            width: 100%;
+            max-width: 500px;
+            padding: 10px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(var(--grid-cols), 1fr);
+            gap: 2px;
+            background: rgba(15, 23, 36, 0.9);
+            padding: 10px;
+            border-radius: 12px;
+        }
+
+        .cell {
+            width: 100%;
+            height: auto;
+            aspect-ratio: 1 / 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            background: #0f1724;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.2s ease;
+            user-select: none;
+        }
+
+        .cell:hover {
+            background: #1e293b;
+            transform: scale(1.2);
+        }
+
+        .cell.selected {
+            background: #f59e0b;
+            color: #000;
+        }
+        
+        .cell.encontrada {
+            background: #22c55e;
+            color: #fff;
+        }
+
+        .palavras {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 15px;
+            gap: 8px;
+        }
+
+        .palavras span {
+            background: rgba(0, 0, 0, 0.6);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            cursor: default;
+            transition: all 0.3s ease;
+        }
+
+        .palavras span.encontrada {
+            background: #22c55e;
+            text-decoration: line-through;
+            color: #fff;
+        }
+
+        @media (max-width: 600px) {
+            .grid {
+                gap: 3px;
+            }
+            .cell {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
 </head>
 <body>
     <header>
-        <h1>NÍVEL 1</h1>
+        <h1 id="titulo-nivel"></h1>
         <div class="nivel">AVENTURA</div>
     </header>
 
@@ -134,31 +137,76 @@
     </main>
 
 <script>
-    // Lista de palavras
-    const palavras = ["TESOURO", "MAPA", "CAVERNA", "HERÓI", "VILÃO", "SIGILO", "PISTA", "CÓDIGO", "PORTAL", "ORBE"];
+    // Defina o nível aqui (de 1 a 5)
+    const nivelAtual = 3;
 
-    const gridSize = 10;
+    let palavrasDoNivel = [];
+    let gridRows = 0;
+    let gridCols = 0;
+    let tituloNivel = "";
+
+    switch (nivelAtual) {
+        case 1:
+            tituloNivel = "NÍVEL 1: BÁSICO";
+            gridRows = 10;
+            gridCols = 8;
+            palavrasDoNivel = ["BOM", "LEVE", "LUZ", "DIA", "PAZ", "VIDA", "AR"];
+            break;
+        case 2:
+            tituloNivel = "NÍVEL 2: FÁCIL";
+            gridRows = 12;
+            gridCols = 8;
+            palavrasDoNivel = ["AMOR", "PAZ", "VIDA", "LUZ", "ESPERANÇA", "SORTE", "TEMPO", "FÉ"];
+            break;
+        case 3:
+            tituloNivel = "NÍVEL 3: INTERMEDIÁRIO";
+            gridRows = 15;
+            gridCols = 8;
+            palavrasDoNivel = ["AVENTURA", "VIAGEM", "DESAFIO", "MISTÉRIO", "PODER", "MAGIA", "SONHO", "LIVRO", "HERÓI", "VILÃO"];
+            break;
+        case 4:
+            tituloNivel = "NÍVEL 4: DIFÍCIL";
+            gridRows = 16;
+            gridCols = 9;
+            palavrasDoNivel = ["CRIATIVIDADE", "INSPIRAÇÃO", "IMAGINAÇÃO", "CONHECIMENTO", "DESCOBERTA", "SABEDORIA", "FUTURO", "PROGRESSO", "CIÊNCIA", "HISTÓRIA", "FILOSOFIA"];
+            break;
+        case 5:
+            tituloNivel = "NÍVEL 5: ESPECIALISTA";
+            gridRows = 18;
+            gridCols = 10;
+            palavrasDoNivel = ["CONSTITUIÇÃO", "GOVERNO", "DEMOCRACIA", "CIDADANIA", "LIBERDADE", "JUSTIÇA", "LEGISLAÇÃO", "ELEGIBILIDADE", "SOCIEDADE", "POLÍTICA", "ECONOMIA", "DIREITO"];
+            break;
+        default:
+            console.error("Nível de dificuldade não encontrado.");
+            break;
+    }
+
+    document.getElementById('titulo-nivel').textContent = tituloNivel;
+    document.documentElement.style.setProperty('--grid-cols', gridCols);
+
     const gridElement = document.getElementById("grid");
     const listaElement = document.getElementById("lista-palavras");
 
-    const grid = Array.from({ length: gridSize }, () => Array(gridSize).fill(''));
+    const grid = Array.from({ length: gridRows }, () => Array(gridCols).fill(''));
     let selectedCells = [];
     let palavrasEncontradas = 0;
+    let isSelecting = false;
+    let palavraEncontrada = "";
 
     function colocarPalavrasNoGrid() {
-        palavras.forEach(palavra => {
+        palavrasDoNivel.forEach(palavra => {
             let palavraColocada = false;
             let tentativas = 0;
-            const maxTentativas = 100;
+            const maxTentativas = 5000;
 
             while (!palavraColocada && tentativas < maxTentativas) {
                 tentativas++;
                 
                 const direcao = Math.random() < 0.5 ? 'horizontal' : 'vertical';
-                const linha = Math.floor(Math.random() * gridSize);
-                const coluna = Math.floor(Math.random() * gridSize);
+                const linha = Math.floor(Math.random() * gridRows);
+                const coluna = Math.floor(Math.random() * gridCols);
 
-                if (direcao === 'horizontal' && coluna + palavra.length <= gridSize) {
+                if (direcao === 'horizontal' && coluna + palavra.length <= gridCols) {
                     let podeColocar = true;
                     for (let i = 0; i < palavra.length; i++) {
                         if (grid[linha][coluna + i] !== '' && grid[linha][coluna + i] !== palavra[i]) {
@@ -172,7 +220,7 @@
                         }
                         palavraColocada = true;
                     }
-                } else if (direcao === 'vertical' && linha + palavra.length <= gridSize) {
+                } else if (direcao === 'vertical' && linha + palavra.length <= gridRows) {
                     let podeColocar = true;
                     for (let i = 0; i < palavra.length; i++) {
                         if (grid[linha + i][coluna] !== '' && grid[linha + i][coluna] !== palavra[i]) {
@@ -192,8 +240,8 @@
     }
 
     function preencherGridComLetrasAleatorias() {
-        for (let i = 0; i < gridSize; i++) {
-            for (let j = 0; j < gridSize; j++) {
+        for (let i = 0; i < gridRows; i++) {
+            for (let j = 0; j < gridCols; j++) {
                 if (grid[i][j] === '') {
                     grid[i][j] = String.fromCharCode(65 + Math.floor(Math.random() * 26));
                 }
@@ -202,58 +250,78 @@
     }
 
     function criarCelulasNoHTML() {
-        for (let i = 0; i < gridSize; i++) {
-            for (let j = 0; j < gridSize; j++) {
+        gridElement.innerHTML = '';
+        for (let i = 0; i < gridRows; i++) {
+            for (let j = 0; j < gridCols; j++) {
                 const cell = document.createElement("div");
                 cell.classList.add("cell");
                 cell.textContent = grid[i][j];
                 cell.dataset.row = i;
                 cell.dataset.col = j;
-                cell.addEventListener('click', () => handleCellClick(cell));
+                
+                cell.addEventListener('mousedown', () => iniciarSelecao(cell));
+                cell.addEventListener('mouseup', finalizarSelecao);
+                cell.addEventListener('mouseenter', () => handleMouseOver(cell));
+                
                 gridElement.appendChild(cell);
             }
         }
     }
-    
-    function handleCellClick(cell) {
-        if (cell.classList.contains('encontrada')) return; // Não permite selecionar células já encontradas
 
-        cell.classList.toggle('selected');
+    function iniciarSelecao(cell) {
+        if (cell.classList.contains('encontrada')) return;
+        isSelecting = true;
+        deselecionarCelulas();
+        cell.classList.add('selected');
+        selectedCells.push(cell);
+    }
+
+    function handleMouseOver(cell) {
+        if (!isSelecting || cell.classList.contains('encontrada')) return;
+
+        const primeiro = selectedCells[0];
+        const lastSelected = selectedCells[selectedCells.length - 1];
+
+        const isHorizontal = parseInt(cell.dataset.row) === parseInt(primeiro.dataset.row);
+        const isVertical = parseInt(cell.dataset.col) === parseInt(primeiro.dataset.col);
         
-        if (cell.classList.contains('selected')) {
-            selectedCells.push(cell);
-        } else {
-            selectedCells = selectedCells.filter(c => c !== cell);
-        }
+        const isNextHorizontal = Math.abs(parseInt(cell.dataset.col) - parseInt(lastSelected.dataset.col)) === 1 && isHorizontal;
+        const isNextVertical = Math.abs(parseInt(cell.dataset.row) - parseInt(lastSelected.dataset.row)) === 1 && isVertical;
 
-        if (selectedCells.length >= 2) {
-            verificarSelecao();
+        if ((isHorizontal || isVertical) && !selectedCells.includes(cell) && (isNextHorizontal || isNextVertical)) {
+            cell.classList.add('selected');
+            selectedCells.push(cell);
+        } else if ((isHorizontal || isVertical) && selectedCells.includes(cell) && cell !== lastSelected) {
+            const index = selectedCells.indexOf(cell);
+            selectedCells.slice(index + 1).forEach(c => c.classList.remove('selected'));
+            selectedCells = selectedCells.slice(0, index + 1);
         }
     }
     
-    function verificarSelecao() {
-        const primeiraCelula = selectedCells[0];
-        const ultimaCelula = selectedCells[selectedCells.length - 1];
-
-        // Se a seleção não for uma linha reta, deseleciona tudo
-        const isHorizontal = parseInt(primeiraCelula.dataset.row) === parseInt(ultimaCelula.dataset.row);
-        const isVertical = parseInt(primeiraCelula.dataset.col) === parseInt(ultimaCelula.dataset.col);
-
-        if (!isHorizontal && !isVertical) {
-            deselecionarCelulas();
-            return;
+    function finalizarSelecao() {
+        if (isSelecting) {
+            isSelecting = false;
+            if (selectedCells.length > 1) {
+                verificarSelecao();
+            } else {
+                deselecionarCelulas();
+            }
         }
+    }
 
-        const palavraEncontrada = selectedCells.map(c => c.textContent).join('');
-        const palavraReversa = palavraEncontrada.split('').reverse().join('');
+    function verificarSelecao() {
+        const palavraSelecionada = selectedCells.map(c => c.textContent).join('');
+        const palavraReversa = palavraSelecionada.split('').reverse().join('');
         
-        const palavraNaLista = palavras.find(p => p === palavraEncontrada || p === palavraReversa);
+        const palavraNaLista = palavrasDoNivel.find(p => p === palavraSelecionada || p === palavraReversa);
         
         if (palavraNaLista) {
             marcarComoEncontrada(palavraNaLista);
             palavrasEncontradas++;
-            if (palavrasEncontradas === palavras.length) {
-                alert("Parabéns! Você encontrou todas as palavras!");
+            if (palavrasEncontradas === palavrasDoNivel.length) {
+                setTimeout(() => {
+                    alert("Parabéns! Você encontrou todas as palavras!");
+                }, 500);
             }
         } else {
             deselecionarCelulas();
@@ -280,13 +348,20 @@
     }
     
     function mostrarPalavras() {
-        palavras.forEach(p => {
+        listaElement.innerHTML = '';
+        palavrasDoNivel.forEach(p => {
             const span = document.createElement("span");
             span.textContent = p;
             span.dataset.palavra = p;
             listaElement.appendChild(span);
         });
     }
+
+    document.body.addEventListener('mouseup', () => {
+        if (isSelecting) {
+            finalizarSelecao();
+        }
+    });
 
     // Sequência de execução
     colocarPalavrasNoGrid();
