@@ -297,11 +297,12 @@
     const targetElement = document.elementFromPoint(touch.clientX, touch.clientY);
     
     if (targetElement && targetElement.classList.contains('cell')) {
-        handleMouseOver(targetElement, event);
+        // Passa apenas o elemento, sem o evento
+        handleMouseOver(targetElement);
     }
 }
 
-    function handleMouseOver(cell) {
+   function handleMouseOver(cell) {
     if (!isSelecting) return;
 
     const firstCell = selectedCells[0];
@@ -317,16 +318,15 @@
     const isVertical = dc === 0;
     const isDiagonal = Math.abs(dr) === Math.abs(dc);
 
-    // Permite que o usuário arraste em qualquer direção, desde que seja uma linha reta
     if (isHorizontal || isVertical || isDiagonal) {
         const cellsInPath = getCellsInPath(firstRow, firstCol, currentRow, currentCol);
         
-        // Limpa e reconstrói a seleção a cada movimento
-        deselecionarCelulas();
+        // Remove a classe de seleção de todas as células antes de redesenhar o caminho
+        document.querySelectorAll('.cell.selected').forEach(c => c.classList.remove('selected'));
+        
         cellsInPath.forEach(c => c.classList.add('selected'));
         selectedCells = cellsInPath;
     } else {
-        // Se a forma não for uma linha reta, deseleciona tudo para não confundir o usuário
         deselecionarCelulas();
     }
 }
@@ -354,24 +354,11 @@
     function finalizarSelecao() {
     if (isSelecting) {
         isSelecting = false;
-        // Verifica a seleção apenas quando o usuário solta o dedo/mouse
         if (selectedCells.length > 1) {
             verificarSelecao();
         } else {
             deselecionarCelulas();
         }
-    }
-}
-
-// A função handleTouchMove deve permanecer a que você já tem:
-function handleTouchMove(event) {
-    if (!isSelecting) return;
-    event.preventDefault(); 
-    const touch = event.touches[0];
-    const targetElement = document.elementFromPoint(touch.clientX, touch.clientY);
-    
-    if (targetElement && targetElement.classList.contains('cell')) {
-        handleMouseOver(targetElement);
     }
 }
 
