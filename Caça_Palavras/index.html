@@ -276,10 +276,16 @@
     }
 
     function iniciarSelecao(cell, event) {
-    if (cell.classList.contains('encontrada')) return; // Só bloqueia se a primeira célula já estiver encontrada
-    event.preventDefault(); 
+    // Impede a seleção se a célula já estiver encontrada
+    if (cell.classList.contains('encontrada')) return;
+    
+    // Previne o comportamento padrão (scroll) em dispositivos móveis
+    if (event.type === 'touchstart') {
+        event.preventDefault(); 
+    }
+    
     isSelecting = true;
-    deselecionarCelulas();
+    deselecionarCelulas(); // Limpa qualquer seleção anterior
     cell.classList.add('selected');
     selectedCells.push(cell);
 }
@@ -295,7 +301,7 @@
     }
 }
 
-    function handleMouseOver(cell, event) {
+    function handleMouseOver(cell) {
     if (!isSelecting) return;
 
     const firstCell = selectedCells[0];
@@ -320,7 +326,7 @@
         cellsInPath.forEach(c => c.classList.add('selected'));
         selectedCells = cellsInPath;
     } else {
-        // Se a forma não for uma linha reta, deseleciona tudo
+        // Se a forma não for uma linha reta, deseleciona tudo para não confundir o usuário
         deselecionarCelulas();
     }
 }
@@ -348,11 +354,24 @@
     function finalizarSelecao() {
     if (isSelecting) {
         isSelecting = false;
+        // Verifica a seleção apenas quando o usuário solta o dedo/mouse
         if (selectedCells.length > 1) {
             verificarSelecao();
         } else {
             deselecionarCelulas();
         }
+    }
+}
+
+// A função handleTouchMove deve permanecer a que você já tem:
+function handleTouchMove(event) {
+    if (!isSelecting) return;
+    event.preventDefault(); 
+    const touch = event.touches[0];
+    const targetElement = document.elementFromPoint(touch.clientX, touch.clientY);
+    
+    if (targetElement && targetElement.classList.contains('cell')) {
+        handleMouseOver(targetElement);
     }
 }
 
