@@ -115,8 +115,8 @@
             gap: 2px;
         }
         .cell {
-            width: 40px;
-            height: 40px;
+            width: 35px;
+            height: 35px;
             font-size: 1rem;
         }
     }
@@ -142,24 +142,141 @@
     const gridElement = document.getElementById("grid");
     const listaElement = document.getElementById("lista-palavras");
 
-    function criarGrid() {
-        for (let i = 0; i < gridSize * gridSize; i++) {
-            const cell = document.createElement("div");
-            cell.classList.add("cell");
-            cell.textContent = String.fromCharCode(65 + Math.floor(Math.random() * 26));
-            gridElement.appendChild(cell);
+    const grid = Array.from({ length: gridSize }, () => Array(gridSize).fill(''));
+
+    function colocarPalavrasNoGrid() {
+        palavras.forEach(palavra => {
+            let palavraColocada = false;
+            let tentativas = 0;
+            const maxTentativas = 100;
+
+            while (!palavraColocada && tentativas < maxTentativas) {
+                tentativas++;
+                
+                const direcao = Math.random() < 0.5 ? 'horizontal' : 'vertical';
+                const linha = Math.floor(Math.random() * gridSize);
+                const coluna = Math.floor(Math.random() * gridSize);
+
+                if (direcao === 'horizontal' && coluna + palavra.length <= gridSize) {
+                    let podeColocar = true;
+                    for (let i = 0; i < palavra.length; i++) {
+                        if (grid[linha][coluna + i] !== '' && grid[linha][coluna + i] !== palavra[i]) {
+                            podeColocar = false;
+                            break;
+                        }
+                    }
+                    if (podeColocar) {
+                        for (let i = 0; i < palavra.length; i++) {
+                            grid[linha][coluna + i] = palavra[i];
+                        }
+                        palavraColocada = true;
+                    }
+                } else if (direcao === 'vertical' && linha + palavra.length <= gridSize) {
+                    let podeColocar = true;
+                    for (let i = 0; i < palavra.length; i++) {
+                        if (grid[linha + i][coluna] !== '' && grid[linha + i][coluna] !== palavra[i]) {
+                            podeColocar = false;
+                            break;
+                        }
+                    }
+                    if (podeColocar) {
+                        for (let i = 0; i < palavra.length; i++) {
+                            grid[linha + i][coluna] = palavra[i];
+                        }
+                        palavraColocada = true;
+                    }
+                }
+            }
+        });
+    }
+
+    function preencherGridComLetrasAleatorias() {
+        for (let i = 0; i < gridSize; i++) {
+            for (let j = 0; j < gridSize; j++) {
+                if (grid[i][j] === '') {
+                    grid[i][j] = String.fromCharCode(65 + Math.floor(Math.random() * 26));
+                }
+            }
         }
     }
+
+    function criarCelulasNoHTML() {
+        for (let i = 0; i < gridSize; i++) {
+            for (let j = 0; j < gridSize; j++) {
+                const cell = document.createElement("div");
+                cell.classList.add("cell");
+                cell.textContent = grid[i][j];
+                cell.dataset.row = i;
+                cell.dataset.col = j;
+                cell.addEventListener('click', () => handleCellClick(cell));
+                gridElement.appendChild(cell);
+            }
+        }
+    }
+    
+    // Adicionando o gerenciamento de cliques
+    let selectedCells = [];
+    
+    function handleCellClick(cell) {
+        if (selectedCells.length < 10) { // Limita a seleção para evitar bugs
+            cell.classList.toggle('selected');
+            if (cell.classList.contains('selected')) {
+                selectedCells.push(cell);
+            } else {
+                selectedCells = selectedCells.filter(c => c !== cell);
+            }
+        }
+        
+        if (selectedCells.length > 1) {
+            verificarSelecao();
+        }
+    }
+    
+    function verificarSelecao() {
+        selectedCells.sort((a, b) => {
+            const rowA = parseInt(a.dataset.row);
+            const colA = parseInt(a.dataset.col);
+            const rowB = parseInt(b.dataset.row);
+            const colB = parseInt(b.dataset.col);
+            
+            if (rowA !== rowB) return rowA - rowB;
+            return colA - colB;
+        });
+
+        const palavraEncontrada = selectedCells.map(c => c.textContent).join('');
+        const palavraEncontradaReversa = palavraEncontrada.split('').reverse().join('');
+        
+        const palavraNaLista = palavras.find(p => p === palavraEncontrada || p === palavraEncontradaReversa);
+        
+        if (palavraNaLista) {
+            selectedCells.forEach(c => {
+                c.classList.add('encontrada');
+                c.classList.remove('selected');
+            });
+            const spanPalavra = document.querySelector(`.palavras span[data-palavra="${palavraNaLista}"]`);
+            if (spanPalavra) {
+                spanPalavra.classList.add('encontrada');
+            }
+        }
+        
+        selectedCells.forEach(c => c.classList.remove('selected'));
+        selectedCells = [];
+    }
+    
 
     function mostrarPalavras() {
         palavras.forEach(p => {
             const span = document.createElement("span");
             span.textContent = p;
+            span.dataset.palavra = p;
             listaElement.appendChild(span);
         });
     }
 
-    criarGrid();
+    // Sequência de execução
+    colocarPalavrasNoGrid();
+    preencherGridComLetrasAleatorias();
+    criarCelulasNoHTML();
     mostrarPalavras();
 </script>
 </body>
