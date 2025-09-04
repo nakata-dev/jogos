@@ -68,7 +68,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.5rem;
+            font-size: 2rem;
             font-weight: bold;
             background: #0f1724;
             border-radius: 4px;
@@ -117,10 +117,10 @@
 
         @media (max-width: 600px) {
             .grid {
-                gap: 3px;
+                gap: 2px;
             }
             .cell {
-                font-size: 1.8rem;
+                font-size: 1.8rem; /* Tamanho da fonte para celular */
             }
         }
     </style>
@@ -137,61 +137,53 @@
     </main>
 
 <script>
-    // Defina o nível aqui (de 1 a 5)
-    const nivelAtual = 3;
-
+    let nivelAtual = 1;
     let palavrasDoNivel = [];
     let gridRows = 0;
     let gridCols = 0;
     let tituloNivel = "";
-
-    switch (nivelAtual) {
-        case 1:
-            tituloNivel = "NÍVEL 1: BÁSICO";
-            gridRows = 10;
-            gridCols = 8;
-            palavrasDoNivel = ["BOM", "LEVE", "LUZ", "DIA", "PAZ", "VIDA", "AR"];
-            break;
-        case 2:
-            tituloNivel = "NÍVEL 2: FÁCIL";
-            gridRows = 12;
-            gridCols = 8;
-            palavrasDoNivel = ["AMOR", "PAZ", "VIDA", "LUZ", "ESPERANÇA", "SORTE", "TEMPO", "FÉ"];
-            break;
-        case 3:
-            tituloNivel = "NÍVEL 3: INTERMEDIÁRIO";
-            gridRows = 15;
-            gridCols = 8;
-            palavrasDoNivel = ["AVENTURA", "VIAGEM", "DESAFIO", "MISTÉRIO", "PODER", "MAGIA", "SONHO", "LIVRO", "HERÓI", "VILÃO"];
-            break;
-        case 4:
-            tituloNivel = "NÍVEL 4: DIFÍCIL";
-            gridRows = 16;
-            gridCols = 9;
-            palavrasDoNivel = ["CRIATIVIDADE", "INSPIRAÇÃO", "IMAGINAÇÃO", "CONHECIMENTO", "DESCOBERTA", "SABEDORIA", "FUTURO", "PROGRESSO", "CIÊNCIA", "HISTÓRIA", "FILOSOFIA"];
-            break;
-        case 5:
-            tituloNivel = "NÍVEL 5: ESPECIALISTA";
-            gridRows = 18;
-            gridCols = 10;
-            palavrasDoNivel = ["CONSTITUIÇÃO", "GOVERNO", "DEMOCRACIA", "CIDADANIA", "LIBERDADE", "JUSTIÇA", "LEGISLAÇÃO", "ELEGIBILIDADE", "SOCIEDADE", "POLÍTICA", "ECONOMIA", "DIREITO"];
-            break;
-        default:
-            console.error("Nível de dificuldade não encontrado.");
-            break;
-    }
-
-    document.getElementById('titulo-nivel').textContent = tituloNivel;
-    document.documentElement.style.setProperty('--grid-cols', gridCols);
+    
+    let grid = [];
+    let selectedCells = [];
+    let palavrasEncontradas = 0;
+    let isSelecting = false;
 
     const gridElement = document.getElementById("grid");
     const listaElement = document.getElementById("lista-palavras");
 
-    const grid = Array.from({ length: gridRows }, () => Array(gridCols).fill(''));
-    let selectedCells = [];
-    let palavrasEncontradas = 0;
-    let isSelecting = false;
-    let palavraEncontrada = "";
+    const niveis = {
+        1: { titulo: "NÍVEL 1: BÁSICO", rows: 10, cols: 8, palavras: ["BOM", "LEVE", "LUZ", "DIA", "PAZ", "VIDA", "AR"] },
+        2: { titulo: "NÍVEL 2: FÁCIL", rows: 12, cols: 8, palavras: ["AMOR", "PAZ", "VIDA", "LUZ", "ESPERANÇA", "SORTE", "TEMPO", "FÉ"] },
+        3: { titulo: "NÍVEL 3: INTERMEDIÁRIO", rows: 15, cols: 8, palavras: ["AVENTURA", "VIAGEM", "DESAFIO", "MISTÉRIO", "PODER", "MAGIA", "SONHO", "LIVRO", "HERÓI", "VILÃO"] },
+        4: { titulo: "NÍVEL 4: DIFÍCIL", rows: 16, cols: 9, palavras: ["CRIATIVIDADE", "INSPIRAÇÃO", "IMAGINAÇÃO", "CONHECIMENTO", "DESCOBERTA", "SABEDORIA", "FUTURO", "PROGRESSO", "CIÊNCIA", "HISTÓRIA", "FILOSOFIA"] },
+        5: { titulo: "NÍVEL 5: ESPECIALISTA", rows: 18, cols: 10, palavras: ["CONSTITUIÇÃO", "GOVERNO", "DEMOCRACIA", "CIDADANIA", "LIBERDADE", "JUSTIÇA", "LEGISLAÇÃO", "ELEGIBILIDADE", "SOCIEDADE", "POLÍTICA", "ECONOMIA", "DIREITO"] }
+    };
+
+    function setupGame(nivel) {
+        if (!niveis[nivel]) {
+            console.error("Nível de dificuldade não encontrado.");
+            alert("Parabéns! Você completou todos os níveis!");
+            return;
+        }
+
+        const dadosNivel = niveis[nivel];
+        tituloNivel = dadosNivel.titulo;
+        gridRows = dadosNivel.rows;
+        gridCols = dadosNivel.cols;
+        palavrasDoNivel = dadosNivel.palavras;
+        
+        document.getElementById('titulo-nivel').textContent = tituloNivel;
+        document.documentElement.style.setProperty('--grid-cols', gridCols);
+
+        grid = Array.from({ length: gridRows }, () => Array(gridCols).fill(''));
+        selectedCells = [];
+        palavrasEncontradas = 0;
+
+        colocarPalavrasNoGrid();
+        preencherGridComLetrasAleatorias();
+        criarCelulasNoHTML();
+        mostrarPalavras();
+    }
 
     function colocarPalavrasNoGrid() {
         palavrasDoNivel.forEach(palavra => {
@@ -236,6 +228,9 @@
                     }
                 }
             }
+            if (!palavraColocada) {
+                console.warn(`Aviso: A palavra '${palavra}' não pôde ser colocada na grade após ${maxTentativas} tentativas.`);
+            }
         });
     }
 
@@ -259,24 +254,39 @@
                 cell.dataset.row = i;
                 cell.dataset.col = j;
                 
-                cell.addEventListener('mousedown', () => iniciarSelecao(cell));
-                cell.addEventListener('mouseup', finalizarSelecao);
-                cell.addEventListener('mouseenter', () => handleMouseOver(cell));
+                cell.addEventListener('mousedown', (e) => iniciarSelecao(cell, e));
+                cell.addEventListener('mouseenter', (e) => handleMouseOver(cell, e));
                 
+                cell.addEventListener('touchstart', (e) => iniciarSelecao(cell, e));
+                cell.addEventListener('touchmove', (e) => handleTouchMove(e));
+
                 gridElement.appendChild(cell);
             }
         }
+        document.body.addEventListener('mouseup', finalizarSelecao);
+        document.body.addEventListener('touchend', finalizarSelecao);
     }
 
-    function iniciarSelecao(cell) {
+    function iniciarSelecao(cell, event) {
         if (cell.classList.contains('encontrada')) return;
+        event.preventDefault(); 
         isSelecting = true;
         deselecionarCelulas();
         cell.classList.add('selected');
         selectedCells.push(cell);
     }
 
-    function handleMouseOver(cell) {
+    function handleTouchMove(event) {
+        if (!isSelecting) return;
+        event.preventDefault(); 
+        const touch = event.touches[0];
+        const targetElement = document.elementFromPoint(touch.clientX, touch.clientY);
+        if (targetElement && targetElement.classList.contains('cell')) {
+            handleMouseOver(targetElement, event);
+        }
+    }
+
+    function handleMouseOver(cell, event) {
         if (!isSelecting || cell.classList.contains('encontrada')) return;
 
         const primeiro = selectedCells[0];
@@ -321,6 +331,7 @@
             if (palavrasEncontradas === palavrasDoNivel.length) {
                 setTimeout(() => {
                     alert("Parabéns! Você encontrou todas as palavras!");
+                    carregarProximoNivel();
                 }, 500);
             }
         } else {
@@ -357,17 +368,13 @@
         });
     }
 
-    document.body.addEventListener('mouseup', () => {
-        if (isSelecting) {
-            finalizarSelecao();
-        }
-    });
+    function carregarProximoNivel() {
+        nivelAtual++;
+        setupGame(nivelAtual);
+    }
 
-    // Sequência de execução
-    colocarPalavrasNoGrid();
-    preencherGridComLetrasAleatorias();
-    criarCelulasNoHTML();
-    mostrarPalavras();
+    // Inicia o jogo no nível 1
+    setupGame(nivelAtual);
 </script>
 </body>
 </html>
