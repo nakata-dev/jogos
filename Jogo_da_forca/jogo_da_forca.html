@@ -4,6 +4,20 @@
   <meta charset="UTF-8">
   <title>Jogo da Forca - Filmes Atuais</title>
   <style>
+    a {
+      display: inline-block; /* Para poder aplicar padding e margin */
+      margin-bottom: 20px;
+      padding: 10px 10px;
+      background-color: #007bff;
+      color: white;
+      text-decoration: none;
+      border-radius: 10px;
+    }
+
+    a:hover {
+      background-color: #0056b3;
+    }
+
     body {
       font-family: 'Arial', sans-serif;
       background-color: #fff8f0;
@@ -54,8 +68,8 @@
   </style>
 </head>
 <body>
-<p><a href="../jogos.html">Retornar a Jogos</a></p>
-  <h1>🎬 Jogo da Forca – Nome de Filmes Atuais</h1>
+<p><a href="../index.html">Voltar</a></p>
+  <h1>Adivinhe o Nome</h1>
 
   <div id="palavra">_ _ _ _ _</div>
 
@@ -69,8 +83,7 @@
 
   <script>
     const filmes = [
-      "DUNA", "BARBIE", "OPPENHEIMER", "WONKA", "MADAME TEIA",
-      "GUARDIOES", "ELEMENTOS", "THE MARVELS", "JOGOS VORAZES", "POBRES CRIATURAS", "SUPERMAN", "THUNDERBOLTS"
+      "MAIA", "ALICE", "XUXA", "VAMOS PESCAR", "FRANKENSTEIN", "JESUS CRISTO", "GUSTAVO", "LAICA", "PEDRO", "MARIA", "JOAO", "LUCAS", "MATEUS", "MARCOS", "LARA", "ANA", "CARLA", "BRUNA", "FELIPE", "RAFAEL", "GABRIEL", "LUIZA", "SOPHIA", "ISABELA", "JULIA", "MARIANA", "VICTORIA", "LARISSA", "BEATRIZ", "CAMILA", "LETICIA", "NATHALIA", "THAIS", "RENATA", "ALINE", "THAMIRES", "SANDRA", "PAULA", "DANIELA", "MARCELA", "TATIANA", "VANESSA", "JULIANA", "MIRELLA", "GIOVANNA", "RAQUEL", "ALESSANDRA", "MAYARA", "KARINA", "JESSICA", "MELISSA", "FABIANA", "NATALIA", "PRISCILA", "SILVIA", "ADRIANA", "ELIANA", "CINTIA", "MARTA", "LILIAN", "REGINA", "CLAUDIA", "SUSANA", "VERA", "DANIEL", "RODRIGO", "BRUNO", "LEANDRO", "GUSTAVO", "FELIPE", "MARCOS", "RAFAEL", "LUCAS", "GABRIEL", "DIEGO", "VINICIUS", "LEONARDO", "ALEXANDRE", "WILLIAN", "FABIENNE", "JULIETTE", "SABRINA", "LUNA", "ESTRELA", "SOL", "CEUS", "MARTE", "JUPITER", "SATURNO", "URANO", "NETUNO", "PLUTAO", "GALAXIA", "UNIVERSO", "CONSTELACAO", "ASTEROIDE", "COMETA", "METEORO", "ORION", "ANDROMEDA", "CASSIOPEIA", "LEAO", "TOURO", "GEMEOS", "CANCER", "VIRGEM", "LIBRA", "ESCORPIAO", "SAGITARIO", "CAPRICORNIO", "AQUARIO", "PEIXES", "HOMEM ARANHA", "BATMAN", "MULHER MARAVILHA", "CAPITAO AMERICA", "IRON"
     ];
 
     let palavraEscolhida = "";
