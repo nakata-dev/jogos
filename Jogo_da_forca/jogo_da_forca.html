@@ -50,7 +50,7 @@
 
     button.letra {
       font-weight: bold;
-      flex: 1 1 12%; /* Ocupa até 12% da largura cada */
+      flex: 1 1 30%; /* Ocupa até 30% da largura cada */
       min-width: 40px;
       padding: 10px;
       font-size: clamp(0.9rem, 3vw, 1.3rem);
@@ -87,14 +87,6 @@
       background: #28a745;
       color: white;
     }
-    .cell {
-    font-size: 28px;
-    font-weight: bold;
-    color: #fff;
-    text-shadow: 2px 2px 4px #000; /* deixa a letra com contorno leve, mais legível */
-}
-
-
     #reiniciar:hover {
       background: #218838;
     }
@@ -109,10 +101,17 @@
       }
     }
 
-    @media screen and (max-width: 350px) {
+    @media screen and (max-width: 300px) {
       button.letra {
-        flex: 1 1 22%; 
-        padding: 8px;
+        flex: 1 1 2em; /* letras ocupam quase toda a largura */
+        padding: 12px;
+         .grid {
+    display: grid;
+    grid-template-columns: repeat(10, 60px); /* aumenta o tamanho das células */
+    gap: 4px; /* espaço entre as células */
+    justify-content: center;
+    margin: 20px auto;
+            }
       }
     }
   </style>
@@ -132,7 +131,7 @@
 
   <script>
     const filmes = [
-      "MAIA", "ALICE", "XUXA", "VAMOS PESCAR", "FRANKENSTEIN", "JESUS CRISTO", "GUSTAVO", "LAICA", "PEDRO", "MARIA", "JOAO", "LUCAS", "MATEUS", "MARCOS", "LARA", "ANA", "CARLA", "BRUNA", "FELIPE", "RAFAEL", "GABRIEL", "LUIZA", "SOPHIA", "ISABELA", "JULIA", "MARIANA", "VICTORIA", "LARISSA", "BEATRIZ", "CAMILA", "LETICIA", "NATHALIA", "THAIS", "RENATA", "ALINE", "THAMIRES", "SANDRA", "PAULA", "DANIELA", "MARCELA", "TATIANA", "VANESSA", "JULIANA", "MIRELLA", "GIOVANNA", "RAQUEL", "ALESSANDRA", "MAYARA", "KARINA", "JESSICA", "MELISSA", "FABIANA", "NATALIA", "PRISCILA", "SILVIA", "ADRIANA", "ELIANA", "CINTIA", "MARTA", "LILIAN", "REGINA", "CLAUDIA", "SUSANA", "VERA", "DANIEL", "RODRIGO", "BRUNO", "LEANDRO", "GUSTAVO", "FELIPE", "MARCOS", "RAFAEL", "LUCAS", "GABRIEL", "DIEGO", "VINICIUS", "LEONARDO", "ALEXANDRE", "WILLIAN", "FABIENNE", "JULIETTE", "SABRINA", "LUNA", "ESTRELA", "SOL", "CEUS", "MARTE", "JUPITER", "SATURNO", "URANO", "NETUNO", "PLUTAO", "GALAXIA", "UNIVERSO", "CONSTELACAO", "ASTEROIDE", "COMETA", "METEORO", "ORION", "ANDROMEDA", "CASSIOPEIA", "LEAO", "TOURO", "GEMEOS", "CANCER", "VIRGEM", "LIBRA", "ESCORPIAO", "SAGITARIO", "CAPRICORNIO", "AQUARIO", "PEIXES", "HOMEM ARANHA", "BATMAN", "MULHER MARAVILHA", "CAPITAO AMERICA", "IRON"
+      "MAIA", "ALICE", "XUXA", "VAMOS PESCAR", "FRANKENSTEIN", "JESUS CRISTO", "GUSTAVO", "LAICA", "PEDRO", "MARIA", "JOAO", "LUCAS", "MATEUS", "MARCOS", "LARA", "ANA", "CARLA", "BRUNA", "FELIPE", "RAFAEL", "GABRIEL", "LUIZA", "SOPHIA", "ISABELA", "JULIA", "MARIANA", "VICTORIA", "LARISSA", "BEATRIZ", "CAMILA", "LETICIA", "NATHALIA", "THAIS", "RENATA", "ALINE", "THAMIRES", "SANDRA", "PAULA", "DANIELA", "MARCELA", "TATIANA", "VANESSA", "JULIANA", "MIRELLA", "GIOVANNA", "RAQUEL", "ALESSANDRA", "MAYARA", "KARINA", "JESSICA", "MELISSA", "FABIANA", "NATALIA", "PRISCILA", "SILVIA", "ADRIANA", "ELIANA", "CINTIA", "MARTA", "LILIAN", "REGINA", "CLAUDIA", "SUSANA", "VERA", "DANIEL", "RODRIGO", "BRUNO", "LEANDRO", "GUSTAVO", "FELIPE", "MARCOS", "RAFAEL", "LUCAS", "GABRIEL", "DIEGO", "VINICIUS", "LEONARDO", "ALEXANDRE", "WILLIAN", "FABIENNE", "JULIETTE", "SABRINA", "LUNA", "ESTRELA", "SOL", "CEUS", "MARTE", "JUPITER", "SATURNO", "URANO", "NETUNO", "PLUTAO", "GALAXIA", "UNIVERSO", "CONSTELACAO", "ASTEROIDE", "COMETA", "METEORO", "ORION", "ANDROMEDA", "CASSIOPEIA", "LEAO", "TOURO", "GEMEOS", "CANCER", "VIRGEM", "LIBRA", "ESCORPIAO", "SAGITARIO", "CAPRICORNIO", "AQUARIO", "PEIXES", "HOMEM ARANHA", "BATMAN", "MULHER MARAVILHA", "CAPITAO AMERICA", "IRON","MAYSA"
     ];
 
     let palavraEscolhida = "";
