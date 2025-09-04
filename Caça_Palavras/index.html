@@ -137,12 +137,13 @@
     // Lista de palavras
     const palavras = ["TESOURO", "MAPA", "CAVERNA", "HERÓI", "VILÃO", "SIGILO", "PISTA", "CÓDIGO", "PORTAL", "ORBE"];
 
-    // Cria grid vazio
     const gridSize = 10;
     const gridElement = document.getElementById("grid");
     const listaElement = document.getElementById("lista-palavras");
 
     const grid = Array.from({ length: gridSize }, () => Array(gridSize).fill(''));
+    let selectedCells = [];
+    let palavrasEncontradas = 0;
 
     function colocarPalavrasNoGrid() {
         palavras.forEach(palavra => {
@@ -214,56 +215,70 @@
         }
     }
     
-    // Adicionando o gerenciamento de cliques
-    let selectedCells = [];
-    
     function handleCellClick(cell) {
-        if (selectedCells.length < 10) { // Limita a seleção para evitar bugs
-            cell.classList.toggle('selected');
-            if (cell.classList.contains('selected')) {
-                selectedCells.push(cell);
-            } else {
-                selectedCells = selectedCells.filter(c => c !== cell);
-            }
-        }
+        if (cell.classList.contains('encontrada')) return; // Não permite selecionar células já encontradas
+
+        cell.classList.toggle('selected');
         
-        if (selectedCells.length > 1) {
+        if (cell.classList.contains('selected')) {
+            selectedCells.push(cell);
+        } else {
+            selectedCells = selectedCells.filter(c => c !== cell);
+        }
+
+        if (selectedCells.length >= 2) {
             verificarSelecao();
         }
     }
     
     function verificarSelecao() {
-        selectedCells.sort((a, b) => {
-            const rowA = parseInt(a.dataset.row);
-            const colA = parseInt(a.dataset.col);
-            const rowB = parseInt(b.dataset.row);
-            const colB = parseInt(b.dataset.col);
-            
-            if (rowA !== rowB) return rowA - rowB;
-            return colA - colB;
-        });
+        const primeiraCelula = selectedCells[0];
+        const ultimaCelula = selectedCells[selectedCells.length - 1];
+
+        // Se a seleção não for uma linha reta, deseleciona tudo
+        const isHorizontal = parseInt(primeiraCelula.dataset.row) === parseInt(ultimaCelula.dataset.row);
+        const isVertical = parseInt(primeiraCelula.dataset.col) === parseInt(ultimaCelula.dataset.col);
+
+        if (!isHorizontal && !isVertical) {
+            deselecionarCelulas();
+            return;
+        }
 
         const palavraEncontrada = selectedCells.map(c => c.textContent).join('');
-        const palavraEncontradaReversa = palavraEncontrada.split('').reverse().join('');
+        const palavraReversa = palavraEncontrada.split('').reverse().join('');
         
-        const palavraNaLista = palavras.find(p => p === palavraEncontrada || p === palavraEncontradaReversa);
+        const palavraNaLista = palavras.find(p => p === palavraEncontrada || p === palavraReversa);
         
         if (palavraNaLista) {
-            selectedCells.forEach(c => {
-                c.classList.add('encontrada');
-                c.classList.remove('selected');
-            });
-            const spanPalavra = document.querySelector(`.palavras span[data-palavra="${palavraNaLista}"]`);
-            if (spanPalavra) {
-                spanPalavra.classList.add('encontrada');
+            marcarComoEncontrada(palavraNaLista);
+            palavrasEncontradas++;
+            if (palavrasEncontradas === palavras.length) {
+                alert("Parabéns! Você encontrou todas as palavras!");
             }
+        } else {
+            deselecionarCelulas();
         }
-        
+    }
+
+    function marcarComoEncontrada(palavra) {
+        selectedCells.forEach(c => {
+            c.classList.add('encontrada');
+            c.classList.remove('selected');
+        });
+
+        const spanPalavra = document.querySelector(`.palavras span[data-palavra="${palavra}"]`);
+        if (spanPalavra) {
+            spanPalavra.classList.add('encontrada');
+        }
+
+        selectedCells = [];
+    }
+
+    function deselecionarCelulas() {
         selectedCells.forEach(c => c.classList.remove('selected'));
         selectedCells = [];
     }
     
-
     function mostrarPalavras() {
         palavras.forEach(p => {
             const span = document.createElement("span");
