@@ -128,7 +128,7 @@
 <body>
     <header>
         <h1 id="titulo-nivel"></h1>
-        <div class="nivel">AVENTURA</div>
+        <div class="nivel">NOMES</div>
     </header>
 
     <main>
@@ -152,12 +152,12 @@
     const listaElement = document.getElementById("lista-palavras");
 
     const niveis = {
-        1: { titulo: "NÍVEL 1: BÁSICO", rows: 10, cols: 10, palavras: ["BOM", "LEVE", "LUZ", "DIA", "PAZ", "VIDA", "AR"] },
-        2: { titulo: "NÍVEL 2: FÁCIL", rows: 12, cols: 11, palavras: ["AMOR", "PAZ", "VIDA", "LUZ", "ESPERANÇA", "SORTE", "TEMPO", "FÉ"] },
-        3: { titulo: "NÍVEL 3: INTERMEDIÁRIO", rows: 15, cols: 11, palavras: ["AVENTURA", "VIAGEM", "DESAFIO", "MISTÉRIO", "PODER", "MAGIA", "SONHO", "LIVRO", "HERÓI", "VILÃO"] },
-        4: { titulo: "NÍVEL 4: DIFÍCIL", rows: 16, cols: 12, palavras: ["CRIATIVIDADE", "INSPIRAÇÃO", "IMAGINAÇÃO", "CONHECIMENTO", "DESCOBERTA", "SABEDORIA", "FUTURO", "PROGRESSO", "CIÊNCIA", "HISTÓRIA", "FILOSOFIA"] },
-        5: { titulo: "NÍVEL 5: ESPECIALISTA", rows: 18, cols: 12, palavras: ["CONSTITUIÇÃO", "GOVERNO", "DEMOCRACIA", "CIDADANIA", "LIBERDADE", "JUSTIÇA", "LEGISLAÇÃO", "ELEGIBILIDADE", "SOCIEDADE", "POLÍTICA", "ECONOMIA", "DIREITO"] }
-    };
+    1: { titulo: "NÍVEL 1: BÁSICO", rows: 10, cols: 10, palavras: ["BATIAN", "DITIAN", "PESCA", "MAIA", "XUXA", "LAICA", "CHULIKA"] },
+    2: { titulo: "NÍVEL 2: FÁCIL", rows: 12, cols: 11, palavras: ["JESUS", "PEDRO", "MALU", "EDUARDO", "MARCOS", "REGINA", "PUTUCHA", "ROSA"] },
+    3: { titulo: "NÍVEL 3: INTERMEDIÁRIO", rows: 15, cols: 12, palavras: ["FRANK", "MARCIA", "DIOGO", "SILVIA", "LUIZA", "ERNESTO", "GALVÃO", "TEREZA", "TELMA", "GEREMIAS"] },
+    4: { titulo: "NÍVEL 4: DIFÍCIL", rows: 16, cols: 13, palavras: ["CRIATIVIDADE", "INSPIRAÇÃO", "IMAGINAÇÃO", "CONHECIMENTO", "DESCOBERTA", "SABEDORIA", "FUTURO", "PROGRESSO", "CIÊNCIA", "HISTÓRIA", "FILOSOFIA"] },
+    5: { titulo: "NÍVEL 5: ESPECIALISTA", rows: 18, cols: 14, palavras: ["CONSTITUIÇÃO", "GOVERNO", "DEMOCRACIA", "CIDADANIA", "LIBERDADE", "JUSTIÇA", "LEGISLAÇÃO", "ELEGIBILIDADE", "SOCIEDADE", "POLÍTICA", "ECONOMIA", "DIREITO"] }
+};
 
     function setupGame(nivel) {
         if (!niveis[nivel]) {
@@ -299,26 +299,78 @@
     }
 
     function handleMouseOver(cell, event) {
-        if (!isSelecting || cell.classList.contains('encontrada')) return;
+    if (!isSelecting || cell.classList.contains('encontrada')) return;
 
-        const primeiro = selectedCells[0];
-        const lastSelected = selectedCells[selectedCells.length - 1];
+    const primeiro = selectedCells[0];
+    const lastSelected = selectedCells[selectedCells.length - 1];
 
-        const isHorizontal = parseInt(cell.dataset.row) === parseInt(primeiro.dataset.row);
-        const isVertical = parseInt(cell.dataset.col) === parseInt(primeiro.dataset.col);
+    const currentRow = parseInt(cell.dataset.row);
+    const currentCol = parseInt(cell.dataset.col);
+    const lastRow = parseInt(lastSelected.dataset.row);
+    const lastCol = parseInt(lastSelected.dataset.col);
+    const firstRow = parseInt(primeiro.dataset.row);
+    const firstCol = parseInt(primeiro.dataset.col);
+
+    // Calcula a direção baseada na primeira célula
+    const dr = currentRow - firstRow;
+    const dc = currentCol - firstCol;
+
+    // Apenas se for uma linha reta a partir do início
+    const isHorizontal = dr === 0;
+    const isVertical = dc === 0;
+    const isDiagonal = Math.abs(dr) === Math.abs(dc);
+    
+    // Calcula a distância do movimento
+    const distanceRow = Math.abs(currentRow - lastRow);
+    const distanceCol = Math.abs(currentCol - lastCol);
+
+    if (
+        (isHorizontal || isVertical || isDiagonal) &&
+        !selectedCells.includes(cell) &&
+        (distanceRow === 1 || distanceCol === 1)
+    ) {
+        // Se for um movimento válido (horizontal, vertical ou diagonal)
+        // E a nova célula estiver adjacente à última selecionada, adicione.
+        const cellsInPath = getCellsInPath(firstRow, firstCol, currentRow, currentCol);
         
-        const isNextHorizontal = Math.abs(parseInt(cell.dataset.col) - parseInt(lastSelected.dataset.col)) === 1 && isHorizontal;
-        const isNextVertical = Math.abs(parseInt(cell.dataset.row) - parseInt(lastSelected.dataset.row)) === 1 && isVertical;
-
-        if ((isHorizontal || isVertical) && !selectedCells.includes(cell) && (isNextHorizontal || isNextVertical)) {
-            cell.classList.add('selected');
-            selectedCells.push(cell);
-        } else if ((isHorizontal || isVertical) && selectedCells.includes(cell) && cell !== lastSelected) {
-            const index = selectedCells.indexOf(cell);
-            selectedCells.slice(index + 1).forEach(c => c.classList.remove('selected'));
-            selectedCells = selectedCells.slice(0, index + 1);
+        // Verifica se todas as células no caminho são válidas para seleção
+        const isValidPath = cellsInPath.every(c => !c.classList.contains('encontrada'));
+        
+        if (isValidPath) {
+            deselecionarCelulas(); // Limpa a seleção para reconstruir
+            cellsInPath.forEach(c => c.classList.add('selected'));
+            selectedCells = cellsInPath;
         }
+    } else if (
+        (isHorizontal || isVertical || isDiagonal) && 
+        selectedCells.includes(cell)
+    ) {
+        // Se o usuário está desfazendo a seleção
+        const index = selectedCells.indexOf(cell);
+        const cellsToDeselect = selectedCells.slice(index + 1);
+        cellsToDeselect.forEach(c => c.classList.remove('selected'));
+        selectedCells = selectedCells.slice(0, index + 1);
     }
+}
+
+function getCellsInPath(r1, c1, r2, c2) {
+    const cells = [];
+    const dr = Math.sign(r2 - r1);
+    const dc = Math.sign(c2 - c1);
+    
+    let r = r1;
+    let c = c1;
+    
+    while (r !== r2 + dr || c !== c2 + dc) {
+        const cell = document.querySelector(`[data-row="${r}"][data-col="${c}"]`);
+        if (cell) {
+            cells.push(cell);
+        }
+        r += dr;
+        c += dc;
+    }
+    return cells;
+}
     
     function finalizarSelecao() {
         if (isSelecting) {
@@ -332,24 +384,54 @@
     }
 
     function verificarSelecao() {
-        const palavraSelecionada = selectedCells.map(c => c.textContent).join('');
-        const palavraReversa = palavraSelecionada.split('').reverse().join('');
-        
-        const palavraNaLista = palavrasDoNivel.find(p => p === palavraSelecionada || p === palavraReversa);
-        
-        if (palavraNaLista) {
-            marcarComoEncontrada(palavraNaLista);
-            palavrasEncontradas++;
-            if (palavrasEncontradas === palavrasDoNivel.length) {
-                setTimeout(() => {
-                    alert("Parabéns! Você encontrou todas as palavras!");
-                    carregarProximoNivel();
-                }, 500);
-            }
-        } else {
-            deselecionarCelulas();
-        }
+    const palavraSelecionada = selectedCells.map(c => c.textContent).join('');
+    const palavraReversa = palavraSelecionada.split('').reverse().join('');
+    
+    const palavraNaLista = palavrasDoNivel.find(p => p === palavraSelecionada || p === palavraReversa);
+    
+    // Se a palavra não for encontrada na lista, deseleciona tudo
+    if (!palavraNaLista) {
+        deselecionarCelulas();
+        return;
     }
+
+    // Ordena as células para garantir a verificação em sequência
+    selectedCells.sort((a, b) => {
+        const rowA = parseInt(a.dataset.row);
+        const colA = parseInt(a.dataset.col);
+        const rowB = parseInt(b.dataset.row);
+        const colB = parseInt(b.dataset.col);
+        if (rowA !== rowB) return rowA - rowB;
+        return colA - colB;
+    });
+
+    // Pega as coordenadas da primeira e última célula
+    const primeiraCelula = selectedCells[0];
+    const ultimaCelula = selectedCells[selectedCells.length - 1];
+    const dr = parseInt(ultimaCelula.dataset.row) - parseInt(primeiraCelula.dataset.row);
+    const dc = parseInt(ultimaCelula.dataset.col) - parseInt(primeiraCelula.dataset.col);
+    
+    const length = selectedCells.length - 1;
+
+    // Checa se a seleção é uma linha reta (horizontal, vertical ou diagonal)
+    const isHorizontal = dr === 0 && Math.abs(dc) === length;
+    const isVertical = dc === 0 && Math.abs(dr) === length;
+    const isDiagonal = Math.abs(dr) === Math.abs(dc) && Math.abs(dr) === length;
+
+    if (isHorizontal || isVertical || isDiagonal) {
+        marcarComoEncontrada(palavraNaLista);
+        palavrasEncontradas++;
+        if (palavrasEncontradas === palavrasDoNivel.length) {
+            setTimeout(() => {
+                alert("Parabéns! Você encontrou todas as palavras!");
+                carregarProximoNivel();
+            }, 500);
+        }
+    } else {
+        // Se a forma não for uma linha reta, deseleciona
+        deselecionarCelulas();
+    }
+}
 
     function marcarComoEncontrada(palavra) {
         selectedCells.forEach(c => {
