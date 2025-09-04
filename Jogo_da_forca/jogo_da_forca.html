@@ -3,15 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <title>Jogo da Forca - Filmes Atuais</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Essencial para celular -->
   <style>
     a {
-      display: inline-block; /* Para poder aplicar padding e margin */
+      display: inline-block;
       margin-bottom: 10px;
-      padding: 10px 10px;
+      padding: 10px 15px;
       background-color: #007bff;
       color: white;
       text-decoration: none;
       border-radius: 10px;
+      font-size: 1rem;
     }
 
     a:hover {
@@ -22,75 +24,86 @@
       font-family: 'Arial', sans-serif;
       background-color: #fff8f0;
       text-align: center;
-      padding: 30px;
-      
+      padding: 20px;
     }
 
     h1 {
-      font-size: 2rem;
+      font-size: clamp(1.5rem, 5vw, 2.5rem); /* Ajusta tamanho conforme tela */
       color: #444;
-      margin: none;
     }
 
     #palavra {
-      font-size: 2.5rem;
-      letter-spacing: 15px;
+      font-size: clamp(1.8rem, 6vw, 2.5rem);
+      letter-spacing: 0.5em;
       margin: 20px 0;
+      word-wrap: break-word;
     }
 
     #letras {
       margin-top: 20px;
+      display: flex;
+      flex-wrap: wrap; /* Faz quebrar linha */
+      justify-content: center;
+      gap: 5px;
     }
 
     button.letra {
-      margin: 5px;
-      padding: 5px;
-      font-size: 1em;
+      flex: 1 1 12%; /* Ocupa até 12% da largura cada */
+      min-width: 40px;
+      padding: 10px;
+      font-size: clamp(0.9rem, 3vw, 1.2rem);
       cursor: pointer;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      background: #f0f0f0;
+      transition: background 0.2s;
+    }
+
+    button.letra:hover {
+      background: #d0d0d0;
     }
 
     #mensagem {
-      font-size: 1.5rem;
-      margin-top: 20px;
+      font-size: clamp(1.2rem, 4vw, 1.5rem);
+      margin-top: 15px;
       font-weight: bold;
     }
 
     #erros {
       color: red;
       margin-top: 10px;
-      font-size: 1.2rem;
+      font-size: clamp(1rem, 3.5vw, 1.2rem);
     }
 
     #reiniciar {
-      
-      padding: 10px 20px;
-      font-size: 0.8em;
+      margin: 15px 0;
+      padding: 10px 15px;
+      font-size: clamp(0.9rem, 3vw, 1.2rem);
       cursor: pointer;
+      border: none;
+      border-radius: 8px;
+      background: #28a745;
+      color: white;
     }
 
-    @media screen and (max-width: 600px) {
-      button.letra {
-        font-size: 2em;
-        letter-spacing: 10px;
-      }
+    #reiniciar:hover {
+      background: #218838;
     }
-    @media screen and (max-width: 400px) {
 
+    /* Melhor ajuste em telas menores */
+    @media screen and (max-width: 500px) {
+      #palavra {
+        letter-spacing: 0.3em;
+      }
       button.letra {
-        padding: 2em;
-        font-size: 10px;
+        flex: 1 1 18%; /* letras ocupam mais largura */
       }
     }
-    @media screen and (max-width: 300px) {
+
+    @media screen and (max-width: 350px) {
       button.letra {
-        padding: 2em;
-        font-size: 10px;
-        html, body{
-            width: 100vw;
-            height: 100vh;
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
+        flex: 1 1 22%; 
+        padding: 8px;
       }
     }
   </style>
@@ -107,7 +120,6 @@
   <div id="erros"></div>
 
   <div id="mensagem"></div>
-
 
   <script>
     const filmes = [
