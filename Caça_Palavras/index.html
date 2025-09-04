@@ -152,11 +152,11 @@
     const listaElement = document.getElementById("lista-palavras");
 
     const niveis = {
-        1: { titulo: "NÍVEL 1: BÁSICO", rows: 10, cols: 8, palavras: ["BOM", "LEVE", "LUZ", "DIA", "PAZ", "VIDA", "AR"] },
-        2: { titulo: "NÍVEL 2: FÁCIL", rows: 12, cols: 8, palavras: ["AMOR", "PAZ", "VIDA", "LUZ", "ESPERANÇA", "SORTE", "TEMPO", "FÉ"] },
-        3: { titulo: "NÍVEL 3: INTERMEDIÁRIO", rows: 15, cols: 8, palavras: ["AVENTURA", "VIAGEM", "DESAFIO", "MISTÉRIO", "PODER", "MAGIA", "SONHO", "LIVRO", "HERÓI", "VILÃO"] },
-        4: { titulo: "NÍVEL 4: DIFÍCIL", rows: 16, cols: 9, palavras: ["CRIATIVIDADE", "INSPIRAÇÃO", "IMAGINAÇÃO", "CONHECIMENTO", "DESCOBERTA", "SABEDORIA", "FUTURO", "PROGRESSO", "CIÊNCIA", "HISTÓRIA", "FILOSOFIA"] },
-        5: { titulo: "NÍVEL 5: ESPECIALISTA", rows: 18, cols: 10, palavras: ["CONSTITUIÇÃO", "GOVERNO", "DEMOCRACIA", "CIDADANIA", "LIBERDADE", "JUSTIÇA", "LEGISLAÇÃO", "ELEGIBILIDADE", "SOCIEDADE", "POLÍTICA", "ECONOMIA", "DIREITO"] }
+        1: { titulo: "NÍVEL 1: BÁSICO", rows: 10, cols: 10, palavras: ["BOM", "LEVE", "LUZ", "DIA", "PAZ", "VIDA", "AR"] },
+        2: { titulo: "NÍVEL 2: FÁCIL", rows: 12, cols: 11, palavras: ["AMOR", "PAZ", "VIDA", "LUZ", "ESPERANÇA", "SORTE", "TEMPO", "FÉ"] },
+        3: { titulo: "NÍVEL 3: INTERMEDIÁRIO", rows: 15, cols: 11, palavras: ["AVENTURA", "VIAGEM", "DESAFIO", "MISTÉRIO", "PODER", "MAGIA", "SONHO", "LIVRO", "HERÓI", "VILÃO"] },
+        4: { titulo: "NÍVEL 4: DIFÍCIL", rows: 16, cols: 12, palavras: ["CRIATIVIDADE", "INSPIRAÇÃO", "IMAGINAÇÃO", "CONHECIMENTO", "DESCOBERTA", "SABEDORIA", "FUTURO", "PROGRESSO", "CIÊNCIA", "HISTÓRIA", "FILOSOFIA"] },
+        5: { titulo: "NÍVEL 5: ESPECIALISTA", rows: 18, cols: 12, palavras: ["CONSTITUIÇÃO", "GOVERNO", "DEMOCRACIA", "CIDADANIA", "LIBERDADE", "JUSTIÇA", "LEGISLAÇÃO", "ELEGIBILIDADE", "SOCIEDADE", "POLÍTICA", "ECONOMIA", "DIREITO"] }
     };
 
     function setupGame(nivel) {
@@ -185,54 +185,66 @@
         mostrarPalavras();
     }
 
-    function colocarPalavrasNoGrid() {
-        palavrasDoNivel.forEach(palavra => {
-            let palavraColocada = false;
-            let tentativas = 0;
-            const maxTentativas = 5000;
+   function colocarPalavrasNoGrid() {
+    palavrasDoNivel.sort((a, b) => b.length - a.length); // Tenta colocar as palavras maiores primeiro
 
-            while (!palavraColocada && tentativas < maxTentativas) {
-                tentativas++;
-                
-                const direcao = Math.random() < 0.5 ? 'horizontal' : 'vertical';
-                const linha = Math.floor(Math.random() * gridRows);
-                const coluna = Math.floor(Math.random() * gridCols);
+    palavrasDoNivel.forEach(palavra => {
+        let palavraColocada = false;
+        let tentativas = 0;
+        const maxTentativas = 5000;
 
-                if (direcao === 'horizontal' && coluna + palavra.length <= gridCols) {
-                    let podeColocar = true;
-                    for (let i = 0; i < palavra.length; i++) {
-                        if (grid[linha][coluna + i] !== '' && grid[linha][coluna + i] !== palavra[i]) {
-                            podeColocar = false;
-                            break;
-                        }
-                    }
-                    if (podeColocar) {
-                        for (let i = 0; i < palavra.length; i++) {
-                            grid[linha][coluna + i] = palavra[i];
-                        }
-                        palavraColocada = true;
-                    }
-                } else if (direcao === 'vertical' && linha + palavra.length <= gridRows) {
-                    let podeColocar = true;
-                    for (let i = 0; i < palavra.length; i++) {
-                        if (grid[linha + i][coluna] !== '' && grid[linha + i][coluna] !== palavra[i]) {
-                            podeColocar = false;
-                            break;
-                        }
-                    }
-                    if (podeColocar) {
-                        for (let i = 0; i < palavra.length; i++) {
-                            grid[linha + i][coluna] = palavra[i];
-                        }
-                        palavraColocada = true;
-                    }
+        while (!palavraColocada && tentativas < maxTentativas) {
+            tentativas++;
+
+            // Escolhe uma direção aleatória (8 direções)
+            const direcoes = [
+                { dr: 0, dc: 1 },    // Horizontal (direita)
+                { dr: 0, dc: -1 },   // Horizontal (esquerda)
+                { dr: 1, dc: 0 },    // Vertical (baixo)
+                { dr: -1, dc: 0 },   // Vertical (cima)
+                { dr: 1, dc: 1 },    // Diagonal (baixo-direita)
+                { dr: 1, dc: -1 },   // Diagonal (baixo-esquerda)
+                { dr: -1, dc: 1 },   // Diagonal (cima-direita)
+                { dr: -1, dc: -1 }   // Diagonal (cima-esquerda)
+            ];
+            const direcao = direcoes[Math.floor(Math.random() * direcoes.length)];
+
+            // Escolhe uma posição inicial aleatória
+            const linhaInicial = Math.floor(Math.random() * gridRows);
+            const colunaInicial = Math.floor(Math.random() * gridCols);
+
+            let podeColocar = true;
+            for (let i = 0; i < palavra.length; i++) {
+                const linhaAtual = linhaInicial + i * direcao.dr;
+                const colunaAtual = colunaInicial + i * direcao.dc;
+
+                // Checa se a palavra cabe na grade
+                if (linhaAtual < 0 || linhaAtual >= gridRows || colunaAtual < 0 || colunaAtual >= gridCols) {
+                    podeColocar = false;
+                    break;
+                }
+
+                // Checa se a célula está vazia ou se a letra é a mesma (cruzamento)
+                if (grid[linhaAtual][colunaAtual] !== '' && grid[linhaAtual][colunaAtual] !== palavra[i]) {
+                    podeColocar = false;
+                    break;
                 }
             }
-            if (!palavraColocada) {
-                console.warn(`Aviso: A palavra '${palavra}' não pôde ser colocada na grade após ${maxTentativas} tentativas.`);
+
+            if (podeColocar) {
+                for (let i = 0; i < palavra.length; i++) {
+                    const linhaAtual = linhaInicial + i * direcao.dr;
+                    const colunaAtual = colunaInicial + i * direcao.dc;
+                    grid[linhaAtual][colunaAtual] = palavra[i];
+                }
+                palavraColocada = true;
             }
-        });
-    }
+        }
+        if (!palavraColocada) {
+            console.warn(`Aviso: A palavra '${palavra}' não pôde ser colocada na grade após ${maxTentativas} tentativas.`);
+        }
+    });
+}
 
     function preencherGridComLetrasAleatorias() {
         for (let i = 0; i < gridRows; i++) {
