@@ -22,11 +22,11 @@
     a {
       display: inline-block; /* Para poder aplicar padding e margin */
       margin-bottom: 20px;
-      padding: 10px 15px;
+      padding: 10px 10px;
       background-color: #007bff;
       color: white;
       text-decoration: none;
-      border-radius: 5px;
+      border-radius: 10px;
     }
 
     a:hover {
@@ -36,15 +36,16 @@
     #tabuleiro {
       display: grid;
       grid-template-columns: repeat(3, 90px); /* Tamanho menor das células para celular */
-      grid-gap: 4px; /* Espaçamento menor */
+      grid-gap: 5px; /* Espaçamento menor */
       justify-content: center;
+      align-items: center;
       margin: 15px auto; /* Margem ajustada */
       max-width: 300px; /* Garante que o tabuleiro não fique muito grande */
     }
 
     .celula {
-      width: 90px; /* Tamanho menor */
-      height: 90px; /* Tamanho menor */
+      width: 120px; /* Tamanho menor */
+      height: 120px; /* Tamanho menor */
       font-size: 2rem; /* Fonte um pouco menor */
       background-color: #fff;
       border: 2px solid #444;
@@ -60,7 +61,7 @@
     }
 
     #mensagem {
-      font-size: 1.2rem; /* Fonte um pouco menor */
+      font-size: 2rem; /* Fonte um pouco menor */
       margin-top: 15px;
     }
 
@@ -98,7 +99,7 @@
       .celula {
         width: 80px;
         height: 80px;
-        font-size: 1.8rem;
+        font-size: 3rem;
       }
 
       #mensagem {
@@ -107,7 +108,7 @@
 
       #reiniciar {
         padding: 10px 20px;
-        font-size: 0.9rem;
+        font-size: 1rem;
       }
     }
 
@@ -118,8 +119,8 @@
             max-width: 240px;
         }
         .celula {
-            width: 70px;
-            height: 70px;
+            width: 80px;
+            height: 80px;
             font-size: 1.6rem;
         }
     }
