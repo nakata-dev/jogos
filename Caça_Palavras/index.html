@@ -152,9 +152,9 @@
     const listaElement = document.getElementById("lista-palavras");
 
     const niveis = {
-        1: { titulo: "NÍVEL 1: BÁSICO", rows: 10, cols: 10, palavras: ["BOM", "LEVE", "LUZ", "DIA", "PAZ", "VIDA", "AR"] },
-        2: { titulo: "NÍVEL 2: FÁCIL", rows: 12, cols: 11, palavras: ["AMOR", "PAZ", "VIDA", "LUZ", "ESPERANÇA", "SORTE", "TEMPO", "FÉ"] },
-        3: { titulo: "NÍVEL 3: INTERMEDIÁRIO", rows: 15, cols: 12, palavras: ["AVENTURA", "VIAGEM", "DESAFIO", "MISTÉRIO", "PODER", "MAGIA", "SONHO", "LIVRO", "HERÓI", "VILÃO"] },
+        1: { titulo: "NÍVEL 1: BÁSICO", rows: 10, cols: 10, palavras: ["CHULICA", "LAICA", "MAIA", "XUXA", "PITUCHA", "DAMIA", "MIA"] },
+        2: { titulo: "NÍVEL 2: FÁCIL", rows: 12, cols: 11, palavras: ["AILTON", "CARLOS", "ALICE", "PLATÃO", "CRISTO", "JESUS", "PEDRO", "SILVIA"] },
+        3: { titulo: "NÍVEL 3: INTERMEDIÁRIO", rows: 15, cols: 12, palavras: ["SIGMUND", "EINSTEIN", "BOLSONARO", "DAVINCI", "DALAILAMA", "ELI", "MIAGI", "APOLO", "BIANCA", "GERTHRUDE"] },
         4: { titulo: "NÍVEL 4: DIFÍCIL", rows: 16, cols: 13, palavras: ["CRIATIVIDADE", "INSPIRAÇÃO", "IMAGINAÇÃO", "CONHECIMENTO", "DESCOBERTA", "SABEDORIA", "FUTURO", "PROGRESSO", "CIÊNCIA", "HISTÓRIA", "FILOSOFIA"] },
         5: { titulo: "NÍVEL 5: ESPECIALISTA", rows: 18, cols: 14, palavras: ["CONSTITUIÇÃO", "GOVERNO", "DEMOCRACIA", "CIDADANIA", "LIBERDADE", "JUSTIÇA", "LEGISLAÇÃO", "ELEGIBILIDADE", "SOCIEDADE", "POLÍTICA", "ECONOMIA", "DIREITO"] }
     };
@@ -285,14 +285,15 @@
 }
 
     function handleTouchMove(event) {
-        if (!isSelecting) return;
-        event.preventDefault(); 
-        const touch = event.touches[0];
-        const targetElement = document.elementFromPoint(touch.clientX, touch.clientY);
-        if (targetElement && targetElement.classList.contains('cell')) {
-            handleMouseOver(targetElement, event);
-        }
+    if (!isSelecting) return;
+    event.preventDefault(); 
+    const touch = event.touches[0];
+    const targetElement = document.elementFromPoint(touch.clientX, touch.clientY);
+    
+    if (targetElement && targetElement.classList.contains('cell')) {
+        handleMouseOver(targetElement, event);
     }
+}
 
     function handleMouseOver(cell, event) {
     if (!isSelecting) return;
@@ -345,15 +346,15 @@
 }
     
     function finalizarSelecao() {
-        if (isSelecting) {
-            isSelecting = false;
-            if (selectedCells.length > 1) {
-                verificarSelecao();
-            } else {
-                deselecionarCelulas();
-            }
+    if (isSelecting) {
+        isSelecting = false;
+        if (selectedCells.length > 1) {
+            verificarSelecao();
+        } else {
+            deselecionarCelulas();
         }
     }
+}
 
     function verificarSelecao() {
     const palavraSelecionada = selectedCells.map(c => c.textContent).join('');
