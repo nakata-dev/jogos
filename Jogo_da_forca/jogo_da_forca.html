@@ -95,9 +95,12 @@
     @media screen and (max-width: 500px) {
       #palavra {
         letter-spacing: 0.3em;
+        font-size: clamp(1.5rem, 5vw, 2rem);
       }
       button.letra {
         flex: 1 1 18%; /* letras ocupam mais largura */
+        font-weight: bolder;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       }
     }
 
@@ -110,6 +113,7 @@
     grid-template-columns: repeat(10, 60px); /* aumenta o tamanho das células */
     gap: 4px; /* espaço entre as células */
     justify-content: center;
+    font-weight: bolder;
     margin: 20px auto;
             }
       }
