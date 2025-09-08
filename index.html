@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="img/Soluções.png" type="image/x-icon">
     <link rel="stylesheet" href="index.css">
+    <!--Site que pucha icones direto do Google-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
     <title>Batia</title>
     <style>
         .paragrafo{
@@ -21,15 +24,15 @@
             <p>por: Ailton A. Nakata</p>     
         
     </header>
-    <nav>
-<a href="Jogo_da_forca/jogo_da_forca.html">Adivinhação</a>
-<a href="Jogo_da_velha/jogodavelha.html">Jogo da Velha</a>
-<a href="Jogo_da_Memoria/memoria4X4.html">M 4x4</a>
-<a href="Jogo_da_Memoria/jogodamemoria.html">M 6x6</a>
-
-
-    </nav>
- 
+    <i id="burguer" class="material-icons"onclick="clickMenu()">menu</i>
+        <menu id="itens">
+            <ul>                
+                <li><a href="Jogo_da_forca/jogo_da_forca.html">Adivinhação</a></li>
+                <li><a href="Jogo_da_velha/jogodavelha.html">Jogo da Velha</a></li>
+                <li><a href="Jogo_da_Memoria/memoria4X4.html">M 4x4</a></li>
+                <li><a href="Jogo_da_Memoria/jogodamemoria.html">M 6x6</a></li>
+            </ul>
+        </menu>
         <main>
             <section>
                 <h3>Por que jogar?</h3>
@@ -48,6 +51,24 @@
             </p>
         </footer>
     </div>
-    
+    <script>
+        function clickMenu() {
+    if (itens.style.display == 'block') {
+        itens.style.display = 'none';
+    } else {
+        itens.style.display = 'block';
+    }
+}
+        function mudouTamanho() {
+    // Se a tela for maior que 768px, exibe o menu e esconde o ícone
+    if (window.innerWidth >= 768) {
+        itens.style.display = 'block';
+    } else {
+        // Se for menor, esconde o menu
+        itens.style.display = 'none';
+    }
+}  
+
+    </script>
 </body>
 </html>
