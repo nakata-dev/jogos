@@ -3,190 +3,171 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <!DOCTYPE html>
-<html lang="pt-br">
-<head>
-  <meta charset="UTF-8">
-  <title>Jogo da Memória 10x10</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #111;
-      color: white;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 20px;
-      
-    }
+    <title>Jogo da Memória 6x6</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #111;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
 
-    h1 {
-      margin: auto;
-      font-size: 1.5em;
-      text-align: center;
-    }
+        h1 {
+            margin: auto;
+            font-size: 1.5em;
+            text-align: center;
+        }
 
-    .tabuleiro {
-      display: grid;
-      grid-template-columns: repeat(10, 60px);
-      gap: 5px;
-      justify-content: center;
-      margin-top: 20px;
-    }
+        .tabuleiro {
+            display: grid;
+            grid-template-columns: repeat(6, 60px);
+            gap: 5px;
+            justify-content: center;
+            margin-top: 20px;
+        }
 
-    .carta {
-      width: 60px;
-      height: 60px;
-      background: #333;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 30px;
-      border-radius: 6px;
-      cursor: pointer;
-      user-select: none;
-      transition: transform 0.3s, background 0.3s;
-    }
+        .carta {
+            width: 60px;
+            height: 60px;
+            background: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 30px;
+            border-radius: 6px;
+            cursor: pointer;
+            user-select: none;
+            transition: transform 0.3s, background 0.3s;
+        }
 
-    .carta.virada {
-      background: white;
-      color: black;
-      transform: scale(1.05);
-    }
+        .carta.virada {
+            background: white;
+            color: black;
+            transform: scale(1.05);
+        }
 
-    button {
-      margin-top: 10px;
-      padding: 10px 10px;
-      font-size: 1em;
-      background-color: #444;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
+        button {
+            margin-top: 10px;
+            padding: 10px 10px;
+            font-size: 1em;
+            background-color: #444;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
 
-    button:hover {
-      background-color: #666;
-    }
+        button:hover {
+            background-color: #666;
+        }
 
-    .status {
-      margin-top: 15px;
-    }
+        .status {
+            margin-top: 15px;
+        }
 
-    /* Adicione esta seção ao seu <style> existente */
-@media (max-width: 768px) {
-  /* Reduzir o tamanho das colunas para telas menores */
-  .tabuleiro {
-    grid-template-columns: repeat(10, 1fr); /* 1fr fará com que as colunas se ajustem automaticamente */
-    gap: 2px; /* Reduza o espaçamento entre as cartas */
-  }
-
-  /* Reduzir o tamanho das cartas e da fonte */
-  .carta {
-    width: 35px; /* Novo tamanho para celular */
-    height: 35px;
-    font-size: 1.2em; /* Fonte menor para caber nas cartas */
-  }
-
-  /* Reduza o tamanho da fonte do título para que não ocupe muito espaço */
-  h1 {
-    font-size: 1.2em;
-  }
-}
-  </style>
+        /* Estilos responsivos para celular */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.2em;
+            }
+            .tabuleiro {
+                grid-template-columns: repeat(6, 1fr);
+                gap: 2px;
+            }
+            .carta {
+                width: 65px;
+                height: 65px;
+                font-size: 2.8em;
+            }
+        }
+    </style>
 </head>
 <body>
 
-  <h1>🧠 Jogo da Memória 10x10</h1>
-  
-  <div class="tabuleiro" id="tabuleiro"></div>
-  <button onclick="iniciarJogo()">🔁 Reiniciar</button>
-  <div class="status" id="status"></div>
+    <h1>🧠 Jogo da Memória 6x6</h1>
+    <div class="tabuleiro" id="tabuleiro"></div>
+    <button onclick="iniciarJogo()">🔁 Reiniciar</button>
+    <div class="status" id="status"></div>
 
-  <script>
-    const emojisBase = [
-      '🍕','🍔','🍟','🌮','🌯','🥗','🍣','🍜','🍩','🍪',
-      '🍫','🍿','🍇','🍉','🍊','🍋','🍌','🍍','🥭','🍎',
-      '🍏','🍐','🍑','🥝','🍒','🍓','🥥','🥦','🥕','🌽',
-      '🍆','🥔','🍠','🧄','🧅','🍞','🥐','🥖','🥨','🧀',
-      '🥚','🍳','🥞','🧇','🥓','🥩','🍗','🍖','🌭','🍤'
-    ];
+    <script>
+        const emojisBase = [
+            '🍓', '🍇', '🍉', '🍊', '🍋', '🍌', 
+            '🍍', '🥭', '🍎', '🍏', '🍐', '🍑',
+            '🍒', '🥝', '🥥', '🥑', '🍅', '🍆'
+        ]; // 18 emojis únicos para 18 pares
 
-    const tabuleiro = document.getElementById('tabuleiro');
-    const status = document.getElementById('status');
-    let cartas = [];
-    let primeira = null;
-    let bloqueado = false;
-    let paresEncontrados = 0;
+        const tabuleiro = document.getElementById('tabuleiro');
+        const status = document.getElementById('status');
+        let cartas = [];
+        let primeira = null;
+        let bloqueado = false;
+        let paresEncontrados = 0;
 
-    function embaralhar(array) {
-      return array.sort(() => Math.random() - 0.5);
-    }
+        function embaralhar(array) {
+            return array.sort(() => Math.random() - 0.5);
+        }
 
-    function criarCarta(emoji) {
-      const div = document.createElement('div');
-      div.className = 'carta';
-      div.dataset.emoji = emoji;
-      div.textContent = '❓';
-      div.onclick = () => virarCarta(div);
-      return div;
-    }
+        function criarCarta(emoji) {
+            const div = document.createElement('div');
+            div.className = 'carta';
+            div.dataset.emoji = emoji;
+            div.textContent = '❓';
+            div.onclick = () => virarCarta(div);
+            return div;
+        }
 
-    function virarCarta(carta) {
-      if (bloqueado || carta.classList.contains('virada')) return;
+        function virarCarta(carta) {
+            if (bloqueado || carta.classList.contains('virada')) return;
 
-      carta.classList.add('virada');
-      carta.textContent = carta.dataset.emoji;
+            carta.classList.add('virada');
+            carta.textContent = carta.dataset.emoji;
 
-      if (!primeira) {
-        primeira = carta;
-      } else {
-        bloqueado = true;
-        if (primeira.dataset.emoji === carta.dataset.emoji) {
-          primeira = null;
-          bloqueado = false;
-          paresEncontrados++;
-          status.textContent = `Pares encontrados: ${paresEncontrados}/50`;
-          if (paresEncontrados === 50) {
-            setTimeout(() => alert("🎉 Parabéns! Você encontrou todos os pares!"), 300);
-          }
-        } else {
-          setTimeout(() => {
-            primeira.classList.remove('virada');
-            primeira.textContent = '❓';
-            carta.classList.remove('virada');
-            carta.textContent = '❓';
+            if (!primeira) {
+                primeira = carta;
+            } else {
+                bloqueado = true;
+                if (primeira.dataset.emoji === carta.dataset.emoji) {
+                    primeira = null;
+                    bloqueado = false;
+                    paresEncontrados++;
+                    status.textContent = `Pares encontrados: ${paresEncontrados}/18`; 
+                    if (paresEncontrados === 18) {
+                        setTimeout(() => alert("🎉 Parabéns! Você encontrou todos os pares!"), 300);
+                    }
+                } else {
+                    setTimeout(() => {
+                        primeira.classList.remove('virada');
+                        primeira.textContent = '❓';
+                        carta.classList.remove('virada');
+                        carta.textContent = '❓';
+                        primeira = null;
+                        bloqueado = false;
+                    }, 800);
+                }
+            }
+        }
+
+        function iniciarJogo() {
+            tabuleiro.innerHTML = '';
             primeira = null;
             bloqueado = false;
-          }, 800);
+            paresEncontrados = 0;
+            status.textContent = `Pares encontrados: 0/18`; 
+
+            let emojis = [...emojisBase];
+            emojis = [...emojis, ...emojis];
+            cartas = embaralhar(emojis);
+
+            cartas.forEach(emoji => {
+                tabuleiro.appendChild(criarCarta(emoji));
+            });
         }
-      }
-    }
 
-    function iniciarJogo() {
-      tabuleiro.innerHTML = '';
-      primeira = null;
-      bloqueado = false;
-      paresEncontrados = 0;
-      status.textContent = `Pares encontrados: 0/50`;
-
-      let emojis = [...emojisBase]; // 50 únicos
-      emojis = [...emojis, ...emojis]; // duplicar (100 cartas)
-      cartas = embaralhar(emojis);
-
-      cartas.forEach(emoji => {
-        tabuleiro.appendChild(criarCarta(emoji));
-      });
-    }
-
-    iniciarJogo();
-  </script>
-
-</body>
-</html>
+        iniciarJogo();
+    </script>
 
 </body>
 </html>
