@@ -74,16 +74,18 @@ header > p{
 }
 
 i#burguer{
+    font-size: 2em;
     background-color:#2B2C33;
     display: block;
-    color: rgb(0, 0, 0);
+    color: rgb(255, 254, 254);
     text-align: center;
     padding: 10px;
     cursor: pointer;
  }
  i#burguer:hover{
+    font-size: 2em;
     background-color: #3747A5;
-    color: black;
+    color: rgb(253, 253, 253);
  }
 a {
     color:rgb(13, 35, 54);
