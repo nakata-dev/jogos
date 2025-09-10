@@ -29,12 +29,13 @@
     }
 
     h1 {
-      font-size: clamp(1.5rem, 5vw, 2.5rem); /* Ajusta tamanho conforme tela */
+      font-size: clamp(2rem, 5vw, 2.5rem); /* Ajusta tamanho conforme tela */
       color: #444;
     }
 
     #palavra {
-      font-size: clamp(1.8rem, 6vw, 2.5rem);
+      font-weight: bold;
+      font-size: clamp(2rem, 6vw, 2.5rem);
       letter-spacing: 0.5em;
       margin: 20px 0;
       word-wrap: break-word;
@@ -51,9 +52,9 @@
     button.letra {
       font-weight: bold;
       flex: 1 1 30%; /* Ocupa até 30% da largura cada */
-      min-width: 30px;
+      min-width: 40px;
       padding: 10px;
-      font-size: clamp(1.5rem, 3vw, 1.3rem);
+      font-size: clamp(1.5rem, 3vw, 2rem);
       cursor: pointer;
       border: 1px solid #ccc;
       border-radius: 100px;
@@ -123,7 +124,7 @@
 <body>
   <a href="../index.html">Voltar</a>
   <button id="reiniciar">🔁 Reiniciar</button>
-  <h1>Adivinhe o Nome</h1>
+  <h1>JOGO DA ADIVINHAÇÃO</h1>
 
   <div id="palavra">_ _ _ _ _</div>
 
@@ -135,7 +136,7 @@
 
   <script>
     const filmes = [
-      "MAIA", "ALICE", "XUXA", "AKIO", "SHIGUERU", "JESUS CRISTO", "GUSTAVO", "LAICA", "PEDRO", "MARIA", "JOAO", "LUCAS", "MATEUS", "MARCOS", "LARA", "ANA", "CARLA", "BRUNA", "FELIPE", "RAFAEL", "GABRIEL", "LUIZA", "SOPHIA", "ISABELA", "JULIA", "MARIANA", "VICTORIA", "LARISSA", "BEATRIZ", "CAMILA", "LETICIA", "NATHALIA", "THAIS", "RENATA", "ALINE", "THAMIRES", "SANDRA", "PAULA", "DANIELA", "MARCELA", "TATIANA", "VANESSA", "JULIANA", "MIRELLA", "GIOVANNA", "RAQUEL", "ALESSANDRA", "MAYARA", "KARINA", "JESSICA", "MELISSA", "FABIANA", "NATALIA", "PRISCILA", "SILVIA", "ADRIANA", "ELIANA", "CINTIA", "MARTA", "LILIAN", "REGINA", "CLAUDIA", "SUSANA", "VERA", "DANIEL", "RODRIGO", "BRUNO", "LEANDRO", "GUSTAVO", "FELIPE", "MARCOS", "RAFAEL", "LUCAS", "GABRIEL", "DIEGO", "VINICIUS", "LEONARDO", "ALEXANDRE", "WILLIAN", "FABIENNE", "JULIETTE", "SABRINA", "LUNA", "ESTRELA", "SOL", "CEUS", "MARTE", "JUPITER", "SATURNO", "URANO", "NETUNO", "PLUTAO", "GALAXIA", "UNIVERSO", "CONSTELACAO", "LEAO", "TOURO", "GEMEOS", "CANCER", "VIRGEM", "LIBRA", "ESCORPIAO", "SAGITARIO", "CAPRICORNIO", "AQUARIO", "PEIXES", "HOMEM ARANHA", "BATMAN", "MULHER MARAVILHA", "CAPITAO AMERICA", "IRON","MAYSA","CORINTHIANS","PALMEIRAS","SANTOS","FLAMENGO","VASCO","ATLETICO","GRÊMIO","INTERNACIONAL","FLUMINENSE","BOTAFOGO","CRUZEIRO","BAHIA","VITORIA","SPORT","CEARA","FORTALEZA","GOIAS","ATLÉTICO MINEIRO","ATLÉTICO PARANAENSE","CORITIBA","FIGUEIRENSE","AVAI","BRAGANTINO","JUVENTUDE","CUIABA","AMERICA MINEIRO"
+      "NAKATA","MAIA", "ALICE", "XUXA", "AKIO", "SHIGUERU", "JESUS CRISTO", "GUSTAVO", "LAICA", "PEDRO", "MARIA", "JOAO", "LUCAS", "MATEUS", "MARCOS", "LARA", "ANA", "CARLA", "BRUNA", "FELIPE", "AKIKO","RAFAEL", "GABRIEL", "LUIZA", "SOPHIA", "ISABELA", "JULIA", "MARIANA", "VICTORIA", "LARISSA", "BEATRIZ", "CAMILA", "LETICIA", "NATHALIA", "THAIS", "RENATA", "ALINE", "THAMIRES", "SANDRA", "PAULA", "DANIELA", "MARCELA", "TATIANA", "VANESSA", "JULIANA", "MIRELLA", "GIOVANNA", "RAQUEL", "ALESSANDRA", "MAYARA", "KARINA", "JESSICA", "MELISSA", "FABIANA", "NATALIA", "PRISCILA", "SILVIA", "ADRIANA", "ELIANA", "CINTIA", "MARTA", "LILIANA", "REGINA","TANO", "CLAUDIA", "SUSANA", "VERA", "DANIEL", "RODRIGO", "BRUNO", "LEANDRO", "GUSTAVO", "FELIPE", "MARCOS", "RAFAEL", "LUCAS", "GABRIEL", "DIEGO", "VINICIUS", "LEONARDO", "ALEXANDRE", "WILLIAN", "FUKUDOME","FABIENNE", "JULIETTE", "SABRINA", "LUNA", "ESTRELA", "SOL", "CEUS", "MARTE", "JUPITER", "SATURNO", "URANO", "NETUNO", "PLUTAO", "GALAXIA", "UNIVERSO", "CONSTELACAO", "LEAO", "TOURO", "GEMEOS", "CANCER", "VIRGEM", "LIBRA", "ESCORPIAO", "SAGITARIO", "CAPRICORNIO", "AQUARIO", "PEIXES", "HOMEM ARANHA", "BATMAN", "MULHER MARAVILHA", "CAPITAO AMERICA", "IRON","MAYSA","MIDORI","GEOVANA"
     ];
 
     let palavraEscolhida = "";
